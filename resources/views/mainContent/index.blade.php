@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>AdminLTE 3 | Blank Page</title>
+    <title>ERP</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -70,42 +70,16 @@
     </aside>
 
     <!-- Content Wrapper. Contains page content -->
-    <div class="content-wrapper">
-        <!-- Content Header (Page header) -->
-        <!-- Main content -->
+    <div class="content-wrapper" id="app">
         <section class="content mt-3">
-
-            <!-- Default box -->
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title">Dashbord</h3>
-
-                    <div class="card-tools">
-                        <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
-                            <i class="fas fa-minus"></i></button>
-                        <button type="button" class="btn btn-tool" data-card-widget="remove" data-toggle="tooltip" title="Remove">
-                            <i class="fas fa-times"></i></button>
-                    </div>
-                </div>
-                <div class="card-body">
-                    Start creating your amazing application!
-                </div>
-            </div>
-            <!-- /.card -->
+            <router-view></router-view>
         </section>
-        <!-- /.content -->
+
     </div>
     <!-- /.content-wrapper -->
-
     <footer class="main-footer">
         @include('mainContent.footer')
     </footer>
-
-    <!-- Control Sidebar -->
-    <aside class="control-sidebar control-sidebar-dark">
-        <!-- Control sidebar content goes here -->
-    </aside>
-    <!-- /.control-sidebar -->
 </div>
 <!-- ./wrapper -->
 
