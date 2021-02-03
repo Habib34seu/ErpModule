@@ -3,7 +3,9 @@
             <div class="card-header d-flex bd-highlight">
                 <h3 class="p-2 flex-grow-1 bd-highlight">Country</h3>
                 <div class="p-2 bd-highlight">
-                    <a class="btn btn-info"><i class="far fa-plus-square"></i></a>
+                    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#modal-create">
+                        <i class="far fa-plus-square"></i>
+                    </button>
                 </div>
             </div>
         <!-- /.card-header -->
@@ -23,7 +25,8 @@
                             <td style="width: 150px;">BD</td>
                             <td>Bangladesh</td>
                             <td style="width: 150px;">
-                                <a class="btn btn-primary">
+                                <a type="button"
+                                   class="btn btn-primary" data-toggle="modal" data-target="#modal-edit">
                                     <i class="fas fa-edit"></i>
                                 </a>
                                 <a class="btn btn-danger">
@@ -43,6 +46,53 @@
             </table>
         </div>
         <!-- /.card-body -->
+        <!-- /Country Create Modal Start -->
+                <div class="modal fade" id="modal-create">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Country Add New</h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <p>One fine body&hellip;</p>
+                            </div>
+                            <div class="modal-footer justify-content-between">
+                                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary">Save changes</button>
+                            </div>
+                        </div>
+                        <!-- /.modal-content -->
+                    </div>
+                    <!-- /.modal-dialog -->
+                </div>
+        <!-- /Country Create Modal End -->
+
+        <!-- /Country Edit Modal Start -->
+            <div class="modal fade" id="modal-edit">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Country Update</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p>One fine body&hellip;</p>
+                        </div>
+                        <div class="modal-footer justify-content-between">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary">Save changes</button>
+                        </div>
+                    </div>
+                    <!-- /.modal-content -->
+                </div>
+                <!-- /.modal-dialog -->
+            </div>
+        <!-- /Country Edit Modal End -->
     </div>
     <!-- /.card -->
 
