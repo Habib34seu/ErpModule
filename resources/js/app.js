@@ -4,6 +4,7 @@ require('./bootstrap');
 
 
 Vue.component('dashbord', require('./components/dashbord.vue').default);
+Vue.component('country', require('./components/country/allCountry'));
 
 const app = new Vue({
     el: '#app',
