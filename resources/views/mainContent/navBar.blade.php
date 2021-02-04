@@ -23,28 +23,28 @@
             </router-link>
         </li>
         <li class="nav-item">
-            <a href="" class="nav-link">
+            <router-link to="/buyerInfo" class="nav-link">
                 <i class="far fa-circle nav-icon"></i>
                 <p>Buyer Info</p>
-            </a>
+            </router-link>
         </li>
         <li class="nav-item">
-            <a href="" class="nav-link">
+            <router-link to="/depotInfo" class="nav-link">
                 <i class="far fa-circle nav-icon"></i>
                 <p>Depot Info</p>
-            </a>
+            </router-link>
         </li>
         <li class="nav-item">
-            <a href="" class="nav-link">
+            <router-link to="/deliveryPoint" class="nav-link">
                 <i class="far fa-circle nav-icon"></i>
                 <p>Delivery Point</p>
-            </a>
+            </router-link>
         </li>
         <li class="nav-item">
-            <a href="" class="nav-link">
+            <router-link to="/vehicleInfo" class="nav-link">
                 <i class="far fa-circle nav-icon"></i>
                 <p>Vehicle Info</p>
-            </a>
+            </router-link>
         </li>
         <li class="nav-item">
             <a href="" class="nav-link">
