@@ -73,7 +73,7 @@
             </table>
         </div>
         <!-- /.card-body -->
-        <!-- /Depot  Create Modal Start -->
+        <!-- /Buyer  Create Modal Start -->
         <div class="modal fade" id="modal-create">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
@@ -95,9 +95,9 @@
             </div>
             <!-- /.modal-dialog -->
         </div>
-        <!-- /Depot Create Modal End -->
+        <!-- /Buyer Create Modal End -->
 
-        <!-- /Depot Edit Modal Start -->
+        <!-- /Buyer Edit Modal Start -->
         <div class="modal fade" id="modal-edit">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
@@ -119,7 +119,7 @@
             </div>
             <!-- /.modal-dialog -->
         </div>
-        <!-- /Depot Edit Modal End -->
+        <!-- /Buyer Edit Modal End -->
     </div>
     <!-- /.card -->
 </template>
