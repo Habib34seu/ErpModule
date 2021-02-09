@@ -10,6 +10,11 @@ Vue.component('depotInfo', require('./components/depot_info/allDepotInfo'));
 Vue.component('vehicleInfo', require('./components/vehicle_info/allVehicleInfo'));
 Vue.component('buyerInfo', require('./components/buyer_info/allBuyer'));
 
+import { Form, HasError, AlertError } from 'vform';
+window.Form = Form;
+Vue.component(HasError.name, HasError);
+Vue.component(AlertError.name, AlertError);
+
 const app = new Vue({
     el: '#app',
     router:routes

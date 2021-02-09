@@ -3,8 +3,8 @@
             <div class="card-header d-flex bd-highlight">
                 <h3 class="p-2 flex-grow-1 bd-highlight">Country</h3>
                 <div class="p-2 bd-highlight">
-                    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#modal-create">
-                        <i class="far fa-plus-square"></i>
+                    <button type="button" class="btn btn-info" @click="newModel">
+                        <i class="far fa-plus-square"></i> Add New
                     </button>
                 </div>
             </div>
@@ -20,13 +20,14 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td style="width: 70px;">1</td>
-                            <td style="width: 150px;">BD</td>
-                            <td>Bangladesh</td>
+                        <tr v-for="country in countries" :key="country.id">
+                            <td style="width: 70px;">{{country.id}}</td>
+                            <td style="width: 150px;">{{country.code}}</td>
+                            <td>{{country.name}}</td>
                             <td style="width: 150px;">
                                 <a type="button"
-                                   class="btn btn-primary" data-toggle="modal" data-target="#modal-edit">
+                                   class="btn btn-primary"
+                                   data-toggle="modal" @click="editModal(country)">
                                     <i class="fas fa-edit"></i>
                                 </a>
                                 <a class="btn btn-danger">
@@ -51,48 +52,47 @@
                     <div class="modal-dialog modal-lg">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h4 class="modal-title">Country Add New</h4>
+                                <h4 class="modal-title" v-show="!editmode">Add New Country </h4>
+                                <h4 class="modal-title" v-show="editmode">Update Country </h4>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
-                            <div class="modal-body">
-                                <p>One fine body&hellip;</p>
-                            </div>
-                            <div class="modal-footer justify-content-between">
-                                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-primary">Save changes</button>
-                            </div>
+                            <form @submit.prevent="editmode ? updateCountry() : createCountry()">
+                                <div class="modal-body">
+                                    <div class="form-group row">
+                                        <label for="code" class="col-sm-2 col-form-label">Code</label>
+                                        <div class="col-sm-10">
+                                            <input type="text"  v-model="countryForm.code" name="code"
+                                                   class="form-control" id="code"
+                                                   placeholder="Country Code Entry"
+                                                   :class="{ 'is-invalid': countryForm.errors.has('code') }">
+                                            <has-error :form="countryForm" field="code"></has-error>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="name" class="col-sm-2 col-form-label">Name</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" name="name" v-model="countryForm.name"
+                                                   class="form-control" id="name"
+                                                   placeholder="Country Entry"
+                                                   :class="{ 'is-invalid': countryForm.errors.has('name') }">
+                                                   <has-error :form="countryForm" field="name"></has-error>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer justify-content-between">
+                                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                                    <button type="submit" v-show="!editmode" class="btn btn-primary">Save changes</button>
+                                    <button type="submit"  v-show="editmode" class="btn btn-primary">Update</button>
+                                </div>
+                            </form>
                         </div>
                         <!-- /.modal-content -->
                     </div>
                     <!-- /.modal-dialog -->
                 </div>
         <!-- /Country Create Modal End -->
-
-        <!-- /Country Edit Modal Start -->
-            <div class="modal fade" id="modal-edit">
-                <div class="modal-dialog modal-lg">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h4 class="modal-title">Country Update</h4>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <p>One fine body&hellip;</p>
-                        </div>
-                        <div class="modal-footer justify-content-between">
-                            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary">Save changes</button>
-                        </div>
-                    </div>
-                    <!-- /.modal-content -->
-                </div>
-                <!-- /.modal-dialog -->
-            </div>
-        <!-- /Country Edit Modal End -->
     </div>
     <!-- /.card -->
 
@@ -100,7 +100,65 @@
 
 <script>
     export default {
-        name: "allCountry"
+        data(){
+            return{
+                editmode:false,
+                countries:[],
+                countryForm: new Form({
+                    id:'',
+                    code:'',
+                    name:'',
+                })
+            }
+        },
+        methods:{
+            newModel(){
+                this.editmode = false;
+
+                $('#modal-create').modal('show');
+
+            },
+            editModal(country){
+                this.editmode = true;
+
+                $('#modal-create').modal('show');
+                this.countryForm.fill(country);
+            },
+            loadeCountry(){
+                axios.get("/api/country").then(response => {
+                    //console.log(response.data);
+                    this.countries = response.data;
+
+                });
+            },
+            createCountry(){
+                //console.log("sub");
+                this.countryForm.post('/api/country')
+                    .then(
+                        ({ data }) => {
+
+                            this.countryForm.code='';
+                            this.countryForm.name='';
+
+                            $('#modal-create').modal('hide');
+                            this.loadeCountry();
+                        })
+            },
+            updateCountry(){
+                this.countryForm.put(`/api/country/`+this.countryForm.id)
+                .then(()=>{
+                    console.log('success');
+                })
+                .catch(()=>{
+                    console.log('faild');
+                });
+                $('#modal-create').modal('hide');
+                this.loadeCountry();
+            }
+        },
+        mounted() {
+            this.loadeCountry();
+        }
     }
 </script>
 

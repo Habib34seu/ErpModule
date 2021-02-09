@@ -14,17 +14,9 @@ class CountryController extends Controller
      */
     public function index()
     {
-        //
-    }
+        $countries = Country::get();
+        return response()->json($countries,200);
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -35,7 +27,16 @@ class CountryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request,[
+            'code'=>'required',
+            'name'=>'required'
+        ]);
+
+        $country = Country::create([
+            'code'=>$request->code,
+            'name'=>$request->name,
+        ]);
+        return response()->json('success',200);
     }
 
     /**
@@ -67,9 +68,15 @@ class CountryController extends Controller
      * @param  \App\Models\Country  $country
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Country $country)
+    public function update(Request $request,  $id)
     {
-        //
+        $country = Country::findOrFail($id);
+//        $this->validate($request,[
+//            'code'=>'required|unique:countries,code,'.$country.$id,
+//            'name'=>'required|unique:countries,name,'.$country.$id,
+//        ]);
+        $country->update($request->all());
+        return ['message'=>'Update Successfully'];
     }
 
     /**
