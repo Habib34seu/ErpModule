@@ -87,6 +87,12 @@ class CountryController extends Controller
      */
     public function destroy(Country $country)
     {
-        //
+        if($country){
+            $country->delete();
+
+            return response()->json('success', 200);
+        }else {
+            return response()->json('failed', 404);
+        }
     }
 }

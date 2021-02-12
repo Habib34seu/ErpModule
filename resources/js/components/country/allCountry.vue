@@ -30,7 +30,8 @@
                                    data-toggle="modal" @click="editModal(country)">
                                     <i class="fas fa-edit"></i>
                                 </a>
-                                <a class="btn btn-danger">
+                                <a @click="deleteCountry(country)"
+                                    class="btn btn-danger">
                                     <i class="fas fa-trash-alt"></i>
                                 </a>
                             </td>
@@ -154,6 +155,14 @@
                 });
                 $('#modal-create').modal('hide');
                 this.loadeCountry();
+            },
+            deleteCountry(country){
+                axios.delete(`/api/country/${country.id}`)
+                    .then(() => {
+                    console.log('Delete');
+                });
+                let index = this.countries.indexOf(country);
+                this.countries.splice(index, 1);
             }
         },
         mounted() {

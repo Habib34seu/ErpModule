@@ -2104,6 +2104,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
@@ -2155,6 +2156,13 @@ __webpack_require__.r(__webpack_exports__);
       });
       $('#modal-create').modal('hide');
       this.loadeCountry();
+    },
+    deleteCountry: function deleteCountry(country) {
+      axios["delete"]("/api/country/".concat(country.id)).then(function () {
+        console.log('Delete');
+      });
+      var index = this.countries.indexOf(country);
+      this.countries.splice(index, 1);
     }
   },
   mounted: function mounted() {
@@ -39847,14 +39855,25 @@ var render = function() {
                       [_c("i", { staticClass: "fas fa-edit" })]
                     ),
                     _vm._v(" "),
-                    _vm._m(1, true)
+                    _c(
+                      "a",
+                      {
+                        staticClass: "btn btn-danger",
+                        on: {
+                          click: function($event) {
+                            return _vm.deleteCountry(country)
+                          }
+                        }
+                      },
+                      [_c("i", { staticClass: "fas fa-trash-alt" })]
+                    )
                   ])
                 ])
               }),
               0
             ),
             _vm._v(" "),
-            _vm._m(2)
+            _vm._m(1)
           ]
         )
       ]
@@ -39896,7 +39915,7 @@ var render = function() {
               [_vm._v("Update Country ")]
             ),
             _vm._v(" "),
-            _vm._m(3)
+            _vm._m(2)
           ]),
           _vm._v(" "),
           _c(
@@ -40094,14 +40113,6 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("th", { staticStyle: { width: "150px" } }, [_vm._v("Action")])
       ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("a", { staticClass: "btn btn-danger" }, [
-      _c("i", { staticClass: "fas fa-trash-alt" })
     ])
   },
   function() {
