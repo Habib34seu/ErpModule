@@ -2315,16 +2315,61 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  name: "allDeliveryPoint"
+  data: function data() {
+    return {
+      editmode: false,
+      deliveryPoints: [],
+      deliveryPointsForm: new Form({
+        id: '',
+        code: '',
+        del_point_name: ''
+      })
+    };
+  },
+  methods: {
+    newModel: function newModel() {
+      this.editmode = false;
+      $('#modal-create').modal('show');
+    },
+    editModal: function editModal(deliveryPoint) {
+      this.editmode = true;
+      $('#modal-create').modal('show');
+      this.deliveryPointsForm.fill(deliveryPoint);
+    },
+    loadeDeliveryPoint: function loadeDeliveryPoint() {
+      var _this = this;
+
+      axios.get("/api/deliveryPoint").then(function (response) {
+        console.log(response.data);
+        _this.deliveryPoints = response.data;
+      });
+    },
+    createDeliveryPoint: function createDeliveryPoint() {
+      var _this2 = this;
+
+      //console.log("sub");
+      this.deliveryPointsForm.post('/api/deliveryPoint').then(function (_ref) {
+        var data = _ref.data;
+        _this2.deliveryPointsForm.del_point_name = '';
+        $('#modal-create').modal('hide');
+
+        _this2.loadeDeliveryPoint();
+      });
+    },
+    updateDeliveryPoint: function updateDeliveryPoint() {
+      this.deliveryPointsForm.put("/api/deliveryPoint/" + this.deliveryPointsForm.id).then(function () {
+        console.log('success');
+      })["catch"](function () {
+        console.log('faild');
+      });
+      $('#modal-create').modal('hide');
+      this.loadeCountry();
+    }
+  },
+  mounted: function mounted() {
+    this.loadeDeliveryPoint();
+  }
 });
 
 /***/ }),
@@ -2614,11 +2659,6 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_1__.default({
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
 window._ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
-/**
- * We'll load jQuery and the Bootstrap jQuery plugin which provides support
- * for JavaScript based Bootstrap features such as modals and tabs. This
- * code may be modified to fit the specific needs of your application.
- */
 
 try {
   window.Popper = __webpack_require__(/*! popper.js */ "./node_modules/popper.js/dist/esm/popper.js").default;
@@ -2628,28 +2668,9 @@ try {
 
   __webpack_require__(/*! bootstrap */ "./node_modules/bootstrap/dist/js/bootstrap.js");
 } catch (e) {}
-/**
- * We'll load the axios HTTP library which allows us to easily issue requests
- * to our Laravel back-end. This library automatically handles sending the
- * CSRF token as a header based on the value of the "XSRF" token cookie.
- */
-
 
 window.axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
-/**
- * Echo exposes an expressive API for subscribing to channels and listening
- * for events that are broadcast by Laravel. Echo and event broadcasting
- * allows your team to easily build robust real-time web applications.
- */
-// import Echo from 'laravel-echo';
-// window.Pusher = require('pusher-js');
-// window.Echo = new Echo({
-//     broadcaster: 'pusher',
-//     key: process.env.MIX_PUSHER_APP_KEY,
-//     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
-//     forceTLS: true
-// });
 
 /***/ }),
 
@@ -40241,212 +40262,321 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
-}
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "card" }, [
-      _c("div", { staticClass: "card-header d-flex bd-highlight" }, [
-        _c("h3", { staticClass: "p-2 flex-grow-1 bd-highlight" }, [
-          _vm._v("Delivery Pint Information")
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "p-2 bd-highlight" }, [
-          _c(
-            "button",
-            {
-              staticClass: "btn btn-info",
-              attrs: {
-                type: "button",
-                "data-toggle": "modal",
-                "data-target": "#modal-create"
-              }
-            },
-            [_c("i", { staticClass: "far fa-plus-square" })]
-          )
-        ])
-      ]),
-      _vm._v(" "),
-      _c(
-        "div",
-        {
-          staticClass: "card-body overflow-auto",
-          staticStyle: { height: "500px" }
-        },
-        [
-          _c(
-            "table",
-            {
-              staticClass: "table table-bordered table-striped",
-              attrs: { id: "example1" }
-            },
-            [
-              _c("thead", [
-                _c("tr", [
-                  _c("th", { staticStyle: { width: "70px" } }, [_vm._v("ID")]),
-                  _vm._v(" "),
-                  _c("th", { staticStyle: { width: "150px" } }, [
-                    _vm._v("Code")
+  return _c("div", { staticClass: "card" }, [
+    _vm._m(0),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        staticClass: "card-body overflow-auto",
+        staticStyle: { height: "500px" }
+      },
+      [
+        _c(
+          "table",
+          {
+            staticClass: "table table-bordered table-striped",
+            attrs: { id: "example1" }
+          },
+          [
+            _vm._m(1),
+            _vm._v(" "),
+            _c(
+              "tbody",
+              _vm._l(_vm.deliveryPoints, function(deliveryPoint) {
+                return _c("tr", { key: deliveryPoint.id }, [
+                  _c("td", { staticStyle: { width: "70px" } }, [
+                    _vm._v(_vm._s(deliveryPoint.id))
                   ]),
-                  _vm._v(" "),
-                  _c("th", [_vm._v("Delivery Point")]),
-                  _vm._v(" "),
-                  _c("th", { staticStyle: { width: "150px" } }, [
-                    _vm._v("Action")
-                  ])
-                ])
-              ]),
-              _vm._v(" "),
-              _c("tbody", [
-                _c("tr", [
-                  _c("td", { staticStyle: { width: "70px" } }, [_vm._v("1")]),
                   _vm._v(" "),
                   _c("td", { staticStyle: { width: "150px" } }, [
-                    _vm._v("0000000001")
+                    _vm._v(_vm._s(deliveryPoint.code))
                   ]),
                   _vm._v(" "),
-                  _c("td", [_vm._v("Chittagong")]),
+                  _c("td", [_vm._v(_vm._s(deliveryPoint.del_point_name))]),
                   _vm._v(" "),
                   _c("td", { staticStyle: { width: "150px" } }, [
                     _c(
                       "a",
                       {
                         staticClass: "btn btn-primary",
-                        attrs: {
-                          type: "button",
-                          "data-toggle": "modal",
-                          "data-target": "#modal-edit"
+                        attrs: { type: "button", "data-toggle": "modal" },
+                        on: {
+                          click: function($event) {
+                            return _vm.editModal(deliveryPoint)
+                          }
                         }
                       },
                       [_c("i", { staticClass: "fas fa-edit" })]
                     ),
                     _vm._v(" "),
-                    _c("a", { staticClass: "btn btn-danger" }, [
-                      _c("i", { staticClass: "fas fa-trash-alt" })
-                    ])
+                    _vm._m(2, true)
                   ])
+                ])
+              }),
+              0
+            ),
+            _vm._v(" "),
+            _vm._m(3)
+          ]
+        )
+      ]
+    ),
+    _vm._v(" "),
+    _c("div", { staticClass: "modal fade", attrs: { id: "modal-create" } }, [
+      _c("div", { staticClass: "modal-dialog modal-lg" }, [
+        _c("div", { staticClass: "modal-content" }, [
+          _c("div", { staticClass: "modal-header" }, [
+            _c(
+              "h4",
+              {
+                directives: [
+                  {
+                    name: "show",
+                    rawName: "v-show",
+                    value: !_vm.editmode,
+                    expression: "!editmode"
+                  }
+                ],
+                staticClass: "modal-title"
+              },
+              [_vm._v("Add New Delivery Point ")]
+            ),
+            _vm._v(" "),
+            _c(
+              "h4",
+              {
+                directives: [
+                  {
+                    name: "show",
+                    rawName: "v-show",
+                    value: _vm.editmode,
+                    expression: "editmode"
+                  }
+                ],
+                staticClass: "modal-title"
+              },
+              [_vm._v("Update Delivery Point ")]
+            ),
+            _vm._v(" "),
+            _vm._m(4)
+          ]),
+          _vm._v(" "),
+          _c(
+            "form",
+            {
+              on: {
+                submit: function($event) {
+                  $event.preventDefault()
+                  _vm.editmode
+                    ? _vm.updateDeliveryPoint()
+                    : _vm.createDeliveryPoint()
+                }
+              }
+            },
+            [
+              _c("div", { staticClass: "modal-body" }, [
+                _c("div", { staticClass: "form-group row" }, [
+                  _c(
+                    "label",
+                    {
+                      staticClass: "col-sm-2 col-form-label",
+                      attrs: { for: "name" }
+                    },
+                    [_vm._v("Name")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    { staticClass: "col-sm-10" },
+                    [
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.deliveryPointsForm.del_point_name,
+                            expression: "deliveryPointsForm.del_point_name"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        class: {
+                          "is-invalid": _vm.deliveryPointsForm.errors.has(
+                            "del_point_name"
+                          )
+                        },
+                        attrs: {
+                          type: "text",
+                          name: "del_point_name",
+                          id: "name",
+                          placeholder: "Delivery Point Entry"
+                        },
+                        domProps: {
+                          value: _vm.deliveryPointsForm.del_point_name
+                        },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(
+                              _vm.deliveryPointsForm,
+                              "del_point_name",
+                              $event.target.value
+                            )
+                          }
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("has-error", {
+                        attrs: {
+                          form: _vm.deliveryPointsForm,
+                          field: "del_point_name"
+                        }
+                      })
+                    ],
+                    1
+                  )
                 ])
               ]),
               _vm._v(" "),
-              _c("tfoot", [
-                _c("tr", [
-                  _c("th", [_vm._v("ID")]),
+              _c(
+                "div",
+                { staticClass: "modal-footer justify-content-between" },
+                [
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-danger",
+                      attrs: { type: "button", "data-dismiss": "modal" }
+                    },
+                    [_vm._v("Close")]
+                  ),
                   _vm._v(" "),
-                  _c("th", [_vm._v("Code")]),
+                  _c(
+                    "button",
+                    {
+                      directives: [
+                        {
+                          name: "show",
+                          rawName: "v-show",
+                          value: !_vm.editmode,
+                          expression: "!editmode"
+                        }
+                      ],
+                      staticClass: "btn btn-primary",
+                      attrs: { type: "submit" }
+                    },
+                    [_vm._v("Save changes")]
+                  ),
                   _vm._v(" "),
-                  _c("th", [_vm._v("Delivery Point")]),
-                  _vm._v(" "),
-                  _c("th", [_vm._v("Action")])
-                ])
-              ])
+                  _c(
+                    "button",
+                    {
+                      directives: [
+                        {
+                          name: "show",
+                          rawName: "v-show",
+                          value: _vm.editmode,
+                          expression: "editmode"
+                        }
+                      ],
+                      staticClass: "btn btn-primary",
+                      attrs: { type: "submit" }
+                    },
+                    [_vm._v("Update")]
+                  )
+                ]
+              )
             ]
           )
-        ]
-      ),
-      _vm._v(" "),
-      _c("div", { staticClass: "modal fade", attrs: { id: "modal-create" } }, [
-        _c("div", { staticClass: "modal-dialog modal-lg" }, [
-          _c("div", { staticClass: "modal-content" }, [
-            _c("div", { staticClass: "modal-header" }, [
-              _c("h4", { staticClass: "modal-title" }, [
-                _vm._v("Delivery Point Add New")
-              ]),
-              _vm._v(" "),
-              _c(
-                "button",
-                {
-                  staticClass: "close",
-                  attrs: {
-                    type: "button",
-                    "data-dismiss": "modal",
-                    "aria-label": "Close"
-                  }
-                },
-                [
-                  _c("span", { attrs: { "aria-hidden": "true" } }, [
-                    _vm._v("×")
-                  ])
-                ]
-              )
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "modal-body" }, [
-              _c("p", [_vm._v("One fine body…")])
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "modal-footer justify-content-between" }, [
-              _c(
-                "button",
-                {
-                  staticClass: "btn btn-danger",
-                  attrs: { type: "button", "data-dismiss": "modal" }
-                },
-                [_vm._v("Close")]
-              ),
-              _vm._v(" "),
-              _c(
-                "button",
-                { staticClass: "btn btn-primary", attrs: { type: "button" } },
-                [_vm._v("Save changes")]
-              )
-            ])
-          ])
-        ])
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "modal fade", attrs: { id: "modal-edit" } }, [
-        _c("div", { staticClass: "modal-dialog modal-lg" }, [
-          _c("div", { staticClass: "modal-content" }, [
-            _c("div", { staticClass: "modal-header" }, [
-              _c("h4", { staticClass: "modal-title" }, [
-                _vm._v("Delivery Point Update")
-              ]),
-              _vm._v(" "),
-              _c(
-                "button",
-                {
-                  staticClass: "close",
-                  attrs: {
-                    type: "button",
-                    "data-dismiss": "modal",
-                    "aria-label": "Close"
-                  }
-                },
-                [
-                  _c("span", { attrs: { "aria-hidden": "true" } }, [
-                    _vm._v("×")
-                  ])
-                ]
-              )
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "modal-body" }, [
-              _c("p", [_vm._v("One fine body…")])
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "modal-footer justify-content-between" }, [
-              _c(
-                "button",
-                {
-                  staticClass: "btn btn-danger",
-                  attrs: { type: "button", "data-dismiss": "modal" }
-                },
-                [_vm._v("Close")]
-              ),
-              _vm._v(" "),
-              _c(
-                "button",
-                { staticClass: "btn btn-primary", attrs: { type: "button" } },
-                [_vm._v("Save changes")]
-              )
-            ])
-          ])
         ])
       ])
     ])
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "card-header d-flex bd-highlight" }, [
+      _c("h3", { staticClass: "p-2 flex-grow-1 bd-highlight" }, [
+        _vm._v("Delivery Pint Information")
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "p-2 bd-highlight" }, [
+        _c(
+          "button",
+          {
+            staticClass: "btn btn-info",
+            attrs: {
+              type: "button",
+              "data-toggle": "modal",
+              "data-target": "#modal-create"
+            }
+          },
+          [_c("i", { staticClass: "far fa-plus-square" })]
+        )
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c("tr", [
+        _c("th", { staticStyle: { width: "70px" } }, [_vm._v("ID")]),
+        _vm._v(" "),
+        _c("th", { staticStyle: { width: "150px" } }, [_vm._v("Code")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Delivery Point")]),
+        _vm._v(" "),
+        _c("th", { staticStyle: { width: "150px" } }, [_vm._v("Action")])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("a", { staticClass: "btn btn-danger" }, [
+      _c("i", { staticClass: "fas fa-trash-alt" })
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("tfoot", [
+      _c("tr", [
+        _c("th", [_vm._v("ID")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Code")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Delivery Point")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Action")])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "button",
+      {
+        staticClass: "close",
+        attrs: {
+          type: "button",
+          "data-dismiss": "modal",
+          "aria-label": "Close"
+        }
+      },
+      [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+    )
   }
 ]
 render._withStripped = true

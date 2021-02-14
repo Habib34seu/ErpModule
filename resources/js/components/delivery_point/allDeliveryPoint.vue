@@ -20,16 +20,18 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <td style="width: 70px;">1</td>
-                    <td style="width: 150px;">0000000001</td>
-                    <td>Chittagong</td>
+                <tr v-for="deliveryPoint in deliveryPoints" :key="deliveryPoint.id">
+                    <td style="width: 70px;">{{deliveryPoint.id}}</td>
+                    <td style="width: 150px;">{{deliveryPoint.code}}</td>
+                    <td>{{deliveryPoint.del_point_name}}</td>
                     <td style="width: 150px;">
                         <a type="button"
-                           class="btn btn-primary" data-toggle="modal" data-target="#modal-edit">
+                           class="btn btn-primary"
+                           data-toggle="modal" @click="editModal(deliveryPoint)">
                             <i class="fas fa-edit"></i>
                         </a>
-                        <a class="btn btn-danger">
+                        <a
+                           class="btn btn-danger">
                             <i class="fas fa-trash-alt"></i>
                         </a>
                     </td>
@@ -46,60 +48,108 @@
             </table>
         </div>
         <!-- /.card-body -->
-        <!-- /Country Create Modal Start -->
+        <!-- /Delivery Point Create And Update Modal Start -->
         <div class="modal fade" id="modal-create">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 class="modal-title">Delivery Point Add New</h4>
+                        <h4 class="modal-title" v-show="!editmode">Add New Delivery Point </h4>
+                        <h4 class="modal-title" v-show="editmode">Update Delivery Point </h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <div class="modal-body">
-                        <p>One fine body&hellip;</p>
-                    </div>
-                    <div class="modal-footer justify-content-between">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Save changes</button>
-                    </div>
+                    <form @submit.prevent="editmode ? updateDeliveryPoint() : createDeliveryPoint()">
+                        <div class="modal-body">
+                            <div class="form-group row">
+                                <label for="name" class="col-sm-2 col-form-label">Name</label>
+                                <div class="col-sm-10">
+                                    <input type="text" name="del_point_name"
+                                           v-model="deliveryPointsForm.del_point_name"
+                                           class="form-control" id="name"
+                                           placeholder="Delivery Point Entry"
+                                           :class="{ 'is-invalid': deliveryPointsForm.errors.has('del_point_name') }">
+                                    <has-error :form="deliveryPointsForm" field="del_point_name"></has-error>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer justify-content-between">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                            <button type="submit" v-show="!editmode" class="btn btn-primary">Save changes</button>
+                            <button type="submit"  v-show="editmode" class="btn btn-primary">Update</button>
+                        </div>
+                    </form>
                 </div>
                 <!-- /.modal-content -->
             </div>
             <!-- /.modal-dialog -->
         </div>
-        <!-- /Country Create Modal End -->
-
-        <!-- /Country Edit Modal Start -->
-        <div class="modal fade" id="modal-edit">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title">Delivery Point Update</h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <p>One fine body&hellip;</p>
-                    </div>
-                    <div class="modal-footer justify-content-between">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Save changes</button>
-                    </div>
-                </div>
-                <!-- /.modal-content -->
-            </div>
-            <!-- /.modal-dialog -->
-        </div>
-        <!-- /Country Edit Modal End -->
+        <!-- /Delivery Point  Create And Update Modal End -->
     </div>
     <!-- /.card -->
 </template>
 
 <script>
     export default {
-        name: "allDeliveryPoint"
+        data(){
+            return{
+                editmode:false,
+                deliveryPoints:[],
+                deliveryPointsForm: new Form({
+                    id:'',
+                     code:'',
+                    del_point_name:'',
+                })
+            }
+        },
+
+        methods:{
+            newModel(){
+                this.editmode = false;
+
+                $('#modal-create').modal('show');
+
+            },
+            editModal(deliveryPoint){
+                this.editmode = true;
+
+                $('#modal-create').modal('show');
+                this.deliveryPointsForm.fill(deliveryPoint);
+            },
+            loadeDeliveryPoint(){
+                axios.get("/api/deliveryPoint").then(response => {
+                    console.log(response.data);
+                    this.deliveryPoints = response.data;
+
+                });
+            },
+            createDeliveryPoint(){
+                //console.log("sub");
+                this.deliveryPointsForm.post('/api/deliveryPoint')
+                    .then(
+                        ({ data }) => {
+                            this.deliveryPointsForm.del_point_name='';
+
+                            $('#modal-create').modal('hide');
+                            this.loadeDeliveryPoint();
+                        })
+            },
+            updateDeliveryPoint(){
+                this.deliveryPointsForm.put(`/api/deliveryPoint/`+this.deliveryPointsForm.id)
+                    .then(()=>{
+                        console.log('success');
+                    })
+                    .catch(()=>{
+                        console.log('faild');
+                    });
+                $('#modal-create').modal('hide');
+                this.loadeCountry();
+            },
+        },
+        mounted() {
+            this.loadeDeliveryPoint();
+        }
+
     }
 </script>
 

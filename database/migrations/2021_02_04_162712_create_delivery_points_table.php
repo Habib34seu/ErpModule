@@ -15,10 +15,11 @@ class CreateDeliveryPointsTable extends Migration
     {
         Schema::create('delivery_points', function (Blueprint $table) {
             $table->id();
-            $table->string('code')->unique();
+            $table->unsignedBigInteger('code')->unique();
             $table->string('del_point_name')->unique();
             $table->bigInteger('user_id')->nullable();
             $table->timestamps();
+
         });
     }
 

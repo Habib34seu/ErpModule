@@ -18,7 +18,6 @@ class CountryController extends Controller
         return response()->json($countries,200);
 
     }
-
     /**
      * Store a newly created resource in storage.
      *
@@ -37,28 +36,6 @@ class CountryController extends Controller
             'name'=>$request->name,
         ]);
         return response()->json('success',200);
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Country  $country
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Country $country)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Country  $country
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Country $country)
-    {
-        //
     }
 
     /**

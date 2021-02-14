@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\DeliveryPoint;
+use Haruncpi\LaravelIdGenerator\IdGenerator;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class DeliveryPointController extends Controller
 {
@@ -14,18 +16,10 @@ class DeliveryPointController extends Controller
      */
     public function index()
     {
-        //
+        $deliveryPoints = DeliveryPoint::get();
+        return response()->json($deliveryPoints,200);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -35,29 +29,18 @@ class DeliveryPointController extends Controller
      */
     public function store(Request $request)
     {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\DeliveryPoint  $deliveryPoint
-     * @return \Illuminate\Http\Response
-     */
-    public function show(DeliveryPoint $deliveryPoint)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\DeliveryPoint  $deliveryPoint
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(DeliveryPoint $deliveryPoint)
-    {
-        //
+        $this->validate($request,[
+            'del_point_name'=>'required'
+        ]);
+        //return  DeliveryPoint::where('id')->count();
+        $count = DB::table('delivery_points')->get()->count();
+        $code_gen= IdGenerator::generate(['table' => 'delivery_points', 'length' => 10, 'prefix' =>date('ymd')]);
+        $code_genarate =$code_gen +$count ;
+        $deliveryPoint = DeliveryPoint::create([
+            'code'=>$code_genarate,
+            'del_point_name'=>$request->del_point_name,
+        ]);
+        return response()->json('success',200);
     }
 
     /**
