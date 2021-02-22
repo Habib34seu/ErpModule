@@ -30,7 +30,7 @@
                            data-toggle="modal" @click="editModal(deliveryPoint)">
                             <i class="fas fa-edit"></i>
                         </a>
-                        <a
+                        <a @click="deleteDeliveryPoint(deliveryPoint)"
                            class="btn btn-danger">
                             <i class="fas fa-trash-alt"></i>
                         </a>
@@ -143,8 +143,16 @@
                         console.log('faild');
                     });
                 $('#modal-create').modal('hide');
-                this.loadeCountry();
+                this.loadeDeliveryPoint();
             },
+            deleteDeliveryPoint(deliveryPoint){
+                axios.delete(`/api/deliveryPoint/${deliveryPoint.id}`)
+                    .then(() => {
+                        console.log('Delete');
+                    });
+                let index = this.deliveryPoints.indexOf(deliveryPoint);
+                this.deliveryPoints.splice(index, 1);
+            }
         },
         mounted() {
             this.loadeDeliveryPoint();

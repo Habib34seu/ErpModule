@@ -2364,7 +2364,14 @@ __webpack_require__.r(__webpack_exports__);
         console.log('faild');
       });
       $('#modal-create').modal('hide');
-      this.loadeCountry();
+      this.loadeDeliveryPoint();
+    },
+    deleteDeliveryPoint: function deleteDeliveryPoint(deliveryPoint) {
+      axios["delete"]("/api/deliveryPoint/".concat(deliveryPoint.id)).then(function () {
+        console.log('Delete');
+      });
+      var index = this.deliveryPoints.indexOf(deliveryPoint);
+      this.deliveryPoints.splice(index, 1);
     }
   },
   mounted: function mounted() {
@@ -2490,8 +2497,97 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  name: "allDepotInfo"
+  data: function data() {
+    return {
+      editmode: false,
+      depotInfos: [],
+      deliveryPoints: [],
+      depotInfosForm: new Form({
+        id: '',
+        code: '',
+        name: '',
+        address: '',
+        delivery_point_id: ''
+      })
+    };
+  },
+  methods: {
+    newModel: function newModel() {
+      this.editmode = false;
+      $('#modal-create').modal('show');
+    },
+    editModal: function editModal(depotInfo) {
+      this.editmode = true;
+      $('#modal-create').modal('show');
+      this.depotInfosForm.fill(depotInfo);
+    },
+    loadeDepotInfo: function loadeDepotInfo() {
+      var _this = this;
+
+      axios.get("/api/depotInfo").then(function (response) {
+        console.log(response.data);
+        _this.deliveryPoints = response.data;
+      });
+    },
+    loadeDeliveryPoint: function loadeDeliveryPoint() {
+      var _this2 = this;
+
+      axios.get("/api/deliveryPoint").then(function (response) {
+        console.log(response.data);
+        _this2.deliveryPoints = response.data;
+      });
+    },
+    createdepotInfos: function createdepotInfos() {
+      var _this3 = this;
+
+      //console.log("sub");
+      this.deliveryPointsForm.post('/api/depotInfo').then(function (_ref) {
+        var data = _ref.data;
+        _this3.depotInfosForm.name = '';
+        _this3.depotInfosForm.address = '';
+        _this3.depotInfosForm.delivery_point_id = '';
+        $('#modal-create').modal('hide');
+
+        _this3.loadeDepotInfo();
+      });
+    },
+    updatedepotInfos: function updatedepotInfos() {
+      this.depotInfosForm.put("/api/depotInfo/" + this.depotInfosForm.id).then(function () {
+        console.log('success');
+      })["catch"](function () {
+        console.log('faild');
+      });
+      $('#modal-create').modal('hide');
+      this.loadeDepotInfo();
+    },
+    deleteDeliveryPoint: function deleteDeliveryPoint(deliveryPoint) {
+      axios["delete"]("/api/deliveryPoint/".concat(deliveryPoint.id)).then(function () {
+        console.log('Delete');
+      });
+      var index = this.deliveryPoints.indexOf(deliveryPoint);
+      this.deliveryPoints.splice(index, 1);
+    }
+  },
+  mounted: function mounted() {
+    this.loadeDepotInfo();
+    this.loadeDeliveryPoint();
+  }
 });
 
 /***/ }),
@@ -40310,14 +40406,25 @@ var render = function() {
                       [_c("i", { staticClass: "fas fa-edit" })]
                     ),
                     _vm._v(" "),
-                    _vm._m(2, true)
+                    _c(
+                      "a",
+                      {
+                        staticClass: "btn btn-danger",
+                        on: {
+                          click: function($event) {
+                            return _vm.deleteDeliveryPoint(deliveryPoint)
+                          }
+                        }
+                      },
+                      [_c("i", { staticClass: "fas fa-trash-alt" })]
+                    )
                   ])
                 ])
               }),
               0
             ),
             _vm._v(" "),
-            _vm._m(3)
+            _vm._m(2)
           ]
         )
       ]
@@ -40359,7 +40466,7 @@ var render = function() {
               [_vm._v("Update Delivery Point ")]
             ),
             _vm._v(" "),
-            _vm._m(4)
+            _vm._m(3)
           ]),
           _vm._v(" "),
           _c(
@@ -40541,14 +40648,6 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("a", { staticClass: "btn btn-danger" }, [
-      _c("i", { staticClass: "fas fa-trash-alt" })
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
     return _c("tfoot", [
       _c("tr", [
         _c("th", [_vm._v("ID")]),
@@ -40601,224 +40700,414 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
-}
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "card" }, [
-      _c("div", { staticClass: "card-header d-flex bd-highlight" }, [
-        _c("h3", { staticClass: "p-2 flex-grow-1 bd-highlight" }, [
-          _vm._v("Depot Information")
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "p-2 bd-highlight" }, [
-          _c(
-            "button",
-            {
-              staticClass: "btn btn-info",
-              attrs: {
-                type: "button",
-                "data-toggle": "modal",
-                "data-target": "#modal-create"
-              }
-            },
-            [_c("i", { staticClass: "far fa-plus-square" })]
-          )
-        ])
-      ]),
-      _vm._v(" "),
-      _c(
-        "div",
-        {
-          staticClass: "card-body overflow-auto",
-          staticStyle: { height: "500px" }
-        },
-        [
-          _c(
-            "table",
-            {
-              staticClass: "table table-bordered table-striped",
-              attrs: { id: "example1" }
-            },
-            [
-              _c("thead", [
-                _c("tr", [
-                  _c("th", { staticStyle: { width: "70px" } }, [_vm._v("ID")]),
-                  _vm._v(" "),
-                  _c("th", { staticStyle: { width: "150px" } }, [
-                    _vm._v("Code")
+  return _c("div", { staticClass: "card" }, [
+    _vm._m(0),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        staticClass: "card-body overflow-auto",
+        staticStyle: { height: "500px" }
+      },
+      [
+        _c(
+          "table",
+          {
+            staticClass: "table table-bordered table-striped",
+            attrs: { id: "example1" }
+          },
+          [
+            _vm._m(1),
+            _vm._v(" "),
+            _c(
+              "tbody",
+              _vm._l(_vm.depotInfos, function(depotInfo) {
+                return _c("tr", { key: depotInfo.id }, [
+                  _c("td", { staticStyle: { width: "70px" } }, [
+                    _vm._v(_vm._s(depotInfo.id))
                   ]),
-                  _vm._v(" "),
-                  _c("th", [_vm._v("Depot Name")]),
-                  _vm._v(" "),
-                  _c("th", [_vm._v("Address")]),
-                  _vm._v(" "),
-                  _c("th", [_vm._v("Delivery Point")]),
-                  _vm._v(" "),
-                  _c("th", { staticStyle: { width: "150px" } }, [
-                    _vm._v("Action")
-                  ])
-                ])
-              ]),
-              _vm._v(" "),
-              _c("tbody", [
-                _c("tr", [
-                  _c("td", { staticStyle: { width: "70px" } }, [_vm._v("1")]),
                   _vm._v(" "),
                   _c("td", { staticStyle: { width: "150px" } }, [
-                    _vm._v("0000000001")
+                    _vm._v(_vm._s(depotInfo.code))
                   ]),
                   _vm._v(" "),
-                  _c("td", [_vm._v("Sunny Truns International")]),
+                  _c("td", [_vm._v(_vm._s(depotInfo.name))]),
                   _vm._v(" "),
-                  _c("td", [_vm._v("Spal Depot Chittagong")]),
+                  _c("td", [_vm._v(_vm._s(depotInfo.address))]),
                   _vm._v(" "),
-                  _c("td", [_vm._v("Chittagong")]),
+                  _c("td", [_vm._v(_vm._s(depotInfo.delivery_point_id))]),
                   _vm._v(" "),
                   _c("td", { staticStyle: { width: "150px" } }, [
                     _c(
                       "a",
                       {
                         staticClass: "btn btn-primary",
-                        attrs: {
-                          type: "button",
-                          "data-toggle": "modal",
-                          "data-target": "#modal-edit"
+                        attrs: { type: "button", "data-toggle": "modal" },
+                        on: {
+                          click: function($event) {
+                            return _vm.editModal(_vm.deliveryPoint)
+                          }
                         }
                       },
                       [_c("i", { staticClass: "fas fa-edit" })]
                     ),
                     _vm._v(" "),
-                    _c("a", { staticClass: "btn btn-danger" }, [
-                      _c("i", { staticClass: "fas fa-trash-alt" })
-                    ])
+                    _c(
+                      "a",
+                      {
+                        staticClass: "btn btn-danger",
+                        on: {
+                          click: function($event) {
+                            return _vm.deleteDeliveryPoint(_vm.deliveryPoint)
+                          }
+                        }
+                      },
+                      [_c("i", { staticClass: "fas fa-trash-alt" })]
+                    )
+                  ])
+                ])
+              }),
+              0
+            ),
+            _vm._v(" "),
+            _vm._m(2)
+          ]
+        )
+      ]
+    ),
+    _vm._v(" "),
+    _c("div", { staticClass: "modal fade", attrs: { id: "modal-create" } }, [
+      _c("div", { staticClass: "modal-dialog modal-lg" }, [
+        _c("div", { staticClass: "modal-content" }, [
+          _c("div", { staticClass: "modal-header" }, [
+            _c(
+              "h4",
+              {
+                directives: [
+                  {
+                    name: "show",
+                    rawName: "v-show",
+                    value: !_vm.editmode,
+                    expression: "!editmode"
+                  }
+                ],
+                staticClass: "modal-title"
+              },
+              [_vm._v("Add New Depot ")]
+            ),
+            _vm._v(" "),
+            _c(
+              "h4",
+              {
+                directives: [
+                  {
+                    name: "show",
+                    rawName: "v-show",
+                    value: _vm.editmode,
+                    expression: "editmode"
+                  }
+                ],
+                staticClass: "modal-title"
+              },
+              [_vm._v("Update Depot ")]
+            ),
+            _vm._v(" "),
+            _vm._m(3)
+          ]),
+          _vm._v(" "),
+          _c(
+            "form",
+            {
+              on: {
+                submit: function($event) {
+                  $event.preventDefault()
+                  _vm.editmode ? _vm.updatedepotInfos() : _vm.createdepotInfos()
+                }
+              }
+            },
+            [
+              _c("div", { staticClass: "modal-body" }, [
+                _c("div", { staticClass: "form-group row" }, [
+                  _c(
+                    "label",
+                    {
+                      staticClass: "col-sm-2 col-form-label",
+                      attrs: { for: "name" }
+                    },
+                    [_vm._v("Name")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    { staticClass: "col-sm-10" },
+                    [
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.depotInfosForm.name,
+                            expression: "depotInfosForm.name"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        class: {
+                          "is-invalid": _vm.depotInfosForm.errors.has("name")
+                        },
+                        attrs: {
+                          type: "text",
+                          id: "name",
+                          placeholder: "Delivery Point Entry"
+                        },
+                        domProps: { value: _vm.depotInfosForm.name },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(
+                              _vm.depotInfosForm,
+                              "name",
+                              $event.target.value
+                            )
+                          }
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("has-error", {
+                        attrs: { form: _vm.depotInfosForm, field: "name" }
+                      })
+                    ],
+                    1
+                  )
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "form-group row" }, [
+                  _c(
+                    "label",
+                    {
+                      staticClass: "col-sm-2 col-form-label",
+                      attrs: { for: "address" }
+                    },
+                    [_vm._v("Address")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    { staticClass: "col-sm-10" },
+                    [
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.depotInfosForm.address,
+                            expression: "depotInfosForm.address"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        class: {
+                          "is-invalid": _vm.depotInfosForm.errors.has("address")
+                        },
+                        attrs: {
+                          type: "text",
+                          id: "address",
+                          placeholder: "Delivery Point Entry"
+                        },
+                        domProps: { value: _vm.depotInfosForm.address },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(
+                              _vm.depotInfosForm,
+                              "address",
+                              $event.target.value
+                            )
+                          }
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("has-error", {
+                        attrs: { form: _vm.depotInfosForm, field: "address" }
+                      })
+                    ],
+                    1
+                  )
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "form-group row" }, [
+                  _c(
+                    "label",
+                    {
+                      staticClass: "col-sm-2 col-form-label",
+                      attrs: { for: "del_point_id" }
+                    },
+                    [_vm._v("Delivery Point")]
+                  ),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col-sm-10" }, [
+                    _c(
+                      "select",
+                      {
+                        staticClass: "form-control select2",
+                        staticStyle: { width: "100%" },
+                        attrs: { id: "del_point_id" }
+                      },
+                      _vm._l(_vm.deliveryPoints, function(deliveryPoint) {
+                        return _c(
+                          "option",
+                          {
+                            attrs: { selected: "selected" },
+                            domProps: { value: deliveryPoint.id }
+                          },
+                          [_vm._v(_vm._s(deliveryPoint.del_point_name))]
+                        )
+                      }),
+                      0
+                    )
                   ])
                 ])
               ]),
               _vm._v(" "),
-              _c("tfoot", [
-                _c("tr", [
-                  _c("th", [_vm._v("ID")]),
+              _c(
+                "div",
+                { staticClass: "modal-footer justify-content-between" },
+                [
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-danger",
+                      attrs: { type: "button", "data-dismiss": "modal" }
+                    },
+                    [_vm._v("Close")]
+                  ),
                   _vm._v(" "),
-                  _c("th", [_vm._v("Code")]),
+                  _c(
+                    "button",
+                    {
+                      directives: [
+                        {
+                          name: "show",
+                          rawName: "v-show",
+                          value: !_vm.editmode,
+                          expression: "!editmode"
+                        }
+                      ],
+                      staticClass: "btn btn-primary",
+                      attrs: { type: "submit" }
+                    },
+                    [_vm._v("Save changes")]
+                  ),
                   _vm._v(" "),
-                  _c("th", [_vm._v("Depot Name")]),
-                  _vm._v(" "),
-                  _c("th", [_vm._v("Address")]),
-                  _vm._v(" "),
-                  _c("th", [_vm._v("Delivery Point")]),
-                  _vm._v(" "),
-                  _c("th", [_vm._v("Action")])
-                ])
-              ])
+                  _c(
+                    "button",
+                    {
+                      directives: [
+                        {
+                          name: "show",
+                          rawName: "v-show",
+                          value: _vm.editmode,
+                          expression: "editmode"
+                        }
+                      ],
+                      staticClass: "btn btn-primary",
+                      attrs: { type: "submit" }
+                    },
+                    [_vm._v("Update")]
+                  )
+                ]
+              )
             ]
           )
-        ]
-      ),
-      _vm._v(" "),
-      _c("div", { staticClass: "modal fade", attrs: { id: "modal-create" } }, [
-        _c("div", { staticClass: "modal-dialog modal-lg" }, [
-          _c("div", { staticClass: "modal-content" }, [
-            _c("div", { staticClass: "modal-header" }, [
-              _c("h4", { staticClass: "modal-title" }, [
-                _vm._v("Depot Info Add New")
-              ]),
-              _vm._v(" "),
-              _c(
-                "button",
-                {
-                  staticClass: "close",
-                  attrs: {
-                    type: "button",
-                    "data-dismiss": "modal",
-                    "aria-label": "Close"
-                  }
-                },
-                [
-                  _c("span", { attrs: { "aria-hidden": "true" } }, [
-                    _vm._v("×")
-                  ])
-                ]
-              )
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "modal-body" }, [
-              _c("p", [_vm._v("One fine body…")])
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "modal-footer justify-content-between" }, [
-              _c(
-                "button",
-                {
-                  staticClass: "btn btn-danger",
-                  attrs: { type: "button", "data-dismiss": "modal" }
-                },
-                [_vm._v("Close")]
-              ),
-              _vm._v(" "),
-              _c(
-                "button",
-                { staticClass: "btn btn-primary", attrs: { type: "button" } },
-                [_vm._v("Save changes")]
-              )
-            ])
-          ])
-        ])
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "modal fade", attrs: { id: "modal-edit" } }, [
-        _c("div", { staticClass: "modal-dialog modal-lg" }, [
-          _c("div", { staticClass: "modal-content" }, [
-            _c("div", { staticClass: "modal-header" }, [
-              _c("h4", { staticClass: "modal-title" }, [
-                _vm._v("Depot Info Update")
-              ]),
-              _vm._v(" "),
-              _c(
-                "button",
-                {
-                  staticClass: "close",
-                  attrs: {
-                    type: "button",
-                    "data-dismiss": "modal",
-                    "aria-label": "Close"
-                  }
-                },
-                [
-                  _c("span", { attrs: { "aria-hidden": "true" } }, [
-                    _vm._v("×")
-                  ])
-                ]
-              )
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "modal-body" }, [
-              _c("p", [_vm._v("One fine body…")])
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "modal-footer justify-content-between" }, [
-              _c(
-                "button",
-                {
-                  staticClass: "btn btn-danger",
-                  attrs: { type: "button", "data-dismiss": "modal" }
-                },
-                [_vm._v("Close")]
-              ),
-              _vm._v(" "),
-              _c(
-                "button",
-                { staticClass: "btn btn-primary", attrs: { type: "button" } },
-                [_vm._v("Save changes")]
-              )
-            ])
-          ])
         ])
       ])
     ])
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "card-header d-flex bd-highlight" }, [
+      _c("h3", { staticClass: "p-2 flex-grow-1 bd-highlight" }, [
+        _vm._v("Depot Information")
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "p-2 bd-highlight" }, [
+        _c(
+          "button",
+          {
+            staticClass: "btn btn-info",
+            attrs: {
+              type: "button",
+              "data-toggle": "modal",
+              "data-target": "#modal-create"
+            }
+          },
+          [_c("i", { staticClass: "far fa-plus-square" })]
+        )
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c("tr", [
+        _c("th", { staticStyle: { width: "70px" } }, [_vm._v("ID")]),
+        _vm._v(" "),
+        _c("th", { staticStyle: { width: "150px" } }, [_vm._v("Code")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Name")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Address")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Delivery Point")]),
+        _vm._v(" "),
+        _c("th", { staticStyle: { width: "150px" } }, [_vm._v("Action")])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("tfoot", [
+      _c("tr", [
+        _c("th", [_vm._v("ID")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Code")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Name")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Address")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Delivery Point")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Action")])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "button",
+      {
+        staticClass: "close",
+        attrs: {
+          type: "button",
+          "data-dismiss": "modal",
+          "aria-label": "Close"
+        }
+      },
+      [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+    )
   }
 ]
 render._withStripped = true

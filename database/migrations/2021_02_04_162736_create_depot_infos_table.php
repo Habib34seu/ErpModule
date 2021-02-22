@@ -15,7 +15,7 @@ class CreateDepotInfosTable extends Migration
     {
         Schema::create('depot_infos', function (Blueprint $table) {
             $table->id();
-            $table->string('code')->unique();
+            $table->unsignedBigInteger('code')->unique();
             $table->string('name');
             $table->string('address');
             $table->bigInteger('delivery_point_id');

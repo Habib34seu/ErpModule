@@ -15,25 +15,27 @@
                 <tr>
                     <th style="width: 70px;">ID</th>
                     <th style="width: 150px;">Code</th>
-                    <th>Depot Name</th>
+                    <th>Name</th>
                     <th>Address</th>
                     <th>Delivery Point</th>
                     <th style="width: 150px;">Action</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <td style="width: 70px;">1</td>
-                    <td style="width: 150px;">0000000001</td>
-                    <td>Sunny Truns International</td>
-                    <td>Spal Depot Chittagong</td>
-                    <td>Chittagong</td>
+                <tr v-for="depotInfo in depotInfos" :key="depotInfo.id">
+                    <td style="width: 70px;">{{depotInfo.id}}</td>
+                    <td style="width: 150px;">{{depotInfo.code}}</td>
+                    <td>{{depotInfo.name}}</td>
+                    <td>{{depotInfo.address}}</td>
+                    <td>{{depotInfo.delivery_point_id}}</td>
                     <td style="width: 150px;">
                         <a type="button"
-                           class="btn btn-primary" data-toggle="modal" data-target="#modal-edit">
+                           class="btn btn-primary"
+                           data-toggle="modal" @click="editModal(deliveryPoint)">
                             <i class="fas fa-edit"></i>
                         </a>
-                        <a class="btn btn-danger">
+                        <a @click="deleteDeliveryPoint(deliveryPoint)"
+                           class="btn btn-danger">
                             <i class="fas fa-trash-alt"></i>
                         </a>
                     </td>
@@ -43,7 +45,7 @@
                 <tr>
                     <th>ID</th>
                     <th>Code</th>
-                    <th>Depot Name</th>
+                    <th>Name</th>
                     <th>Address</th>
                     <th>Delivery Point</th>
                     <th>Action</th>
@@ -52,60 +54,153 @@
             </table>
         </div>
         <!-- /.card-body -->
-        <!-- /Depot  Create Modal Start -->
+        <!-- /Delivery Point Create And Update Modal Start -->
         <div class="modal fade" id="modal-create">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 class="modal-title">Depot Info Add New</h4>
+                        <h4 class="modal-title" v-show="!editmode">Add New Depot </h4>
+                        <h4 class="modal-title" v-show="editmode">Update Depot </h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <div class="modal-body">
-                        <p>One fine body&hellip;</p>
-                    </div>
-                    <div class="modal-footer justify-content-between">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Save changes</button>
-                    </div>
+                    <form @submit.prevent="editmode ? updatedepotInfos() : createdepotInfos()">
+                        <div class="modal-body">
+                            <div class="form-group row">
+                                <label for="name" class="col-sm-2 col-form-label">Name</label>
+                                <div class="col-sm-10">
+                                    <input type="text"
+                                           v-model="depotInfosForm.name"
+                                           class="form-control" id="name"
+                                           placeholder="Delivery Point Entry"
+                                           :class="{ 'is-invalid': depotInfosForm.errors.has('name') }">
+                                    <has-error :form="depotInfosForm" field="name"></has-error>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="address" class="col-sm-2 col-form-label">Address</label>
+                                <div class="col-sm-10">
+                                    <input type="text"
+                                           v-model="depotInfosForm.address"
+                                           class="form-control" id="address"
+                                           placeholder="Delivery Point Entry"
+                                           :class="{ 'is-invalid': depotInfosForm.errors.has('address') }">
+                                    <has-error :form="depotInfosForm" field="address"></has-error>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="del_point_id" class="col-sm-2 col-form-label">Delivery Point</label>
+                                <div class="col-sm-10">
+                                    <select id ="del_point_id"
+                                            class="form-control select2"
+                                            style="width: 100%;">
+                                        <option v-for="deliveryPoint in deliveryPoints"
+                                                v-bind:value="deliveryPoint.id"
+                                            selected="selected">{{deliveryPoint.del_point_name}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer justify-content-between">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                            <button type="submit" v-show="!editmode" class="btn btn-primary">Save changes</button>
+                            <button type="submit"  v-show="editmode" class="btn btn-primary">Update</button>
+                        </div>
+                    </form>
                 </div>
                 <!-- /.modal-content -->
             </div>
             <!-- /.modal-dialog -->
         </div>
-        <!-- /Depot Create Modal End -->
-
-        <!-- /Depot Edit Modal Start -->
-        <div class="modal fade" id="modal-edit">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title">Depot Info Update</h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <p>One fine body&hellip;</p>
-                    </div>
-                    <div class="modal-footer justify-content-between">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Save changes</button>
-                    </div>
-                </div>
-                <!-- /.modal-content -->
-            </div>
-            <!-- /.modal-dialog -->
-        </div>
-        <!-- /Depot Edit Modal End -->
+        <!-- /Delivery Point  Create And Update Modal End -->
     </div>
     <!-- /.card -->
 </template>
 
 <script>
     export default {
-        name: "allDepotInfo"
+        data(){
+            return{
+                editmode:false,
+                depotInfos:[],
+                deliveryPoints:[],
+                depotInfosForm: new Form({
+                    id:'',
+                    code:'',
+                    name:'',
+                    address:'',
+                    delivery_point_id:'',
+                })
+            }
+        },
+
+        methods:{
+            newModel(){
+                this.editmode = false;
+
+                $('#modal-create').modal('show');
+
+            },
+            editModal(depotInfo){
+                this.editmode = true;
+
+                $('#modal-create').modal('show');
+                this.depotInfosForm.fill(depotInfo);
+            },
+            loadeDepotInfo(){
+                axios.get("/api/depotInfo").then(response => {
+                    console.log(response.data);
+                    this.deliveryPoints = response.data;
+
+                });
+            },
+            loadeDeliveryPoint(){
+                axios.get("/api/deliveryPoint").then(response => {
+                    console.log(response.data);
+                    this.deliveryPoints = response.data;
+
+                });
+            },
+            createdepotInfos(){
+                //console.log("sub");
+                this.deliveryPointsForm.post('/api/depotInfo')
+                    .then(
+                        ({ data }) => {
+                            this.depotInfosForm.name='';
+                            this.depotInfosForm.address='';
+                            this.depotInfosForm.delivery_point_id='';
+
+                            $('#modal-create').modal('hide');
+                            this.loadeDepotInfo();
+                        })
+            },
+            updatedepotInfos(){
+                this.depotInfosForm.put(`/api/depotInfo/`+this.depotInfosForm.id)
+                    .then(()=>{
+                        console.log('success');
+                    })
+                    .catch(()=>{
+                        console.log('faild');
+                    });
+                $('#modal-create').modal('hide');
+                this.loadeDepotInfo();
+            },
+            deleteDeliveryPoint(deliveryPoint){
+                axios.delete(`/api/deliveryPoint/${deliveryPoint.id}`)
+                    .then(() => {
+                        console.log('Delete');
+                    });
+                let index = this.deliveryPoints.indexOf(deliveryPoint);
+                this.deliveryPoints.splice(index, 1);
+            }
+        },
+        mounted() {
+            this.loadeDepotInfo();
+            this.loadeDeliveryPoint();
+
+        }
+
     }
 </script>
 

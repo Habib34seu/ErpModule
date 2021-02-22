@@ -17,6 +17,7 @@ class DeliveryPointController extends Controller
     public function index()
     {
         $deliveryPoints = DeliveryPoint::get();
+
         return response()->json($deliveryPoints,200);
     }
 
@@ -32,7 +33,6 @@ class DeliveryPointController extends Controller
         $this->validate($request,[
             'del_point_name'=>'required'
         ]);
-        //return  DeliveryPoint::where('id')->count();
         $count = DB::table('delivery_points')->get()->count();
         $code_gen= IdGenerator::generate(['table' => 'delivery_points', 'length' => 10, 'prefix' =>date('ymd')]);
         $code_genarate =$code_gen +$count ;
@@ -50,9 +50,12 @@ class DeliveryPointController extends Controller
      * @param  \App\Models\DeliveryPoint  $deliveryPoint
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, DeliveryPoint $deliveryPoint)
+    public function update(Request $request,  $id)
     {
-        //
+        $delpoint = DeliveryPoint::findOrFail($id);
+        $delpoint->update($request->all());
+        return ['message'=>'Update Successfully'];
+
     }
 
     /**
@@ -63,6 +66,12 @@ class DeliveryPointController extends Controller
      */
     public function destroy(DeliveryPoint $deliveryPoint)
     {
-        //
+        if($deliveryPoint){
+            $deliveryPoint->delete();
+
+            return response()->json('success', 200);
+        }else {
+            return response()->json('failed', 404);
+        }
     }
 }

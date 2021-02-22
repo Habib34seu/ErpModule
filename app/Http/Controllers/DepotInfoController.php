@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DeliveryPoint;
 use App\Models\DepotInfo;
 use Illuminate\Http\Request;
 
@@ -11,10 +12,17 @@ class DepotInfoController extends Controller
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
+     *
      */
+    public function deliveryPoint()
+    {
+        $deliveryPoints = DeliveryPoint::get();
+        return response()->json($deliveryPoints,200);
+    }
     public function index()
     {
-        //
+        $depotInfos = DepotInfo::get();
+        return response()->json($depotInfos,200);
     }
 
     /**
