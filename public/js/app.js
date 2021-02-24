@@ -2330,10 +2330,12 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     newModel: function newModel() {
       this.editmode = false;
+      this.deliveryPointsForm.reset();
       $('#modal-create').modal('show');
     },
     editModal: function editModal(deliveryPoint) {
       this.editmode = true;
+      this.deliveryPointsForm.reset();
       $('#modal-create').modal('show');
       this.deliveryPointsForm.fill(deliveryPoint);
     },
@@ -2341,7 +2343,6 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       axios.get("/api/deliveryPoint").then(function (response) {
-        console.log(response.data);
         _this.deliveryPoints = response.data;
       });
     },
@@ -2512,6 +2513,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
@@ -2530,19 +2532,23 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     newModel: function newModel() {
       this.editmode = false;
+      this.depotInfosForm.reset();
       $('#modal-create').modal('show');
     },
     editModal: function editModal(depotInfo) {
       this.editmode = true;
+      this.depotInfosForm.reset();
       $('#modal-create').modal('show');
       this.depotInfosForm.fill(depotInfo);
+    },
+    DepotInfo: function DepotInfo() {
+      console.log('Create Depot');
     },
     loadeDepotInfo: function loadeDepotInfo() {
       var _this = this;
 
       axios.get("/api/depotInfo").then(function (response) {
-        console.log(response.data);
-        _this.deliveryPoints = response.data;
+        _this.depotInfos = response.data;
       });
     },
     loadeDeliveryPoint: function loadeDeliveryPoint() {
@@ -2557,7 +2563,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this3 = this;
 
       //console.log("sub");
-      this.deliveryPointsForm.post('/api/depotInfo').then(function (_ref) {
+      this.depotInfosForm.post('/api/depotInfo').then(function (_ref) {
         var data = _ref.data;
         _this3.depotInfosForm.name = '';
         _this3.depotInfosForm.address = '';
@@ -2576,17 +2582,17 @@ __webpack_require__.r(__webpack_exports__);
       $('#modal-create').modal('hide');
       this.loadeDepotInfo();
     },
-    deleteDeliveryPoint: function deleteDeliveryPoint(deliveryPoint) {
-      axios["delete"]("/api/deliveryPoint/".concat(deliveryPoint.id)).then(function () {
+    deleteDeliveryPoint: function deleteDeliveryPoint(depotInfo) {
+      axios["delete"]("/api/depotInfo/".concat(depotInfo.id)).then(function () {
         console.log('Delete');
       });
-      var index = this.deliveryPoints.indexOf(deliveryPoint);
-      this.deliveryPoints.splice(index, 1);
+      var index = this.depotInfos.indexOf(depotInfo);
+      this.depotInfos.splice(index, 1);
     }
   },
   mounted: function mounted() {
-    this.loadeDepotInfo();
     this.loadeDeliveryPoint();
+    this.loadeDepotInfo();
   }
 });
 
@@ -40359,7 +40365,27 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "card" }, [
-    _vm._m(0),
+    _c("div", { staticClass: "card-header d-flex bd-highlight" }, [
+      _c("h3", { staticClass: "p-2 flex-grow-1 bd-highlight" }, [
+        _vm._v("Delivery Pint Information")
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "p-2 bd-highlight" }, [
+        _c(
+          "button",
+          {
+            staticClass: "btn btn-info",
+            attrs: {
+              type: "button",
+              "data-toggle": "modal",
+              "data-target": "#modal-create"
+            },
+            on: { click: _vm.newModel }
+          },
+          [_c("i", { staticClass: "far fa-plus-square" })]
+        )
+      ])
+    ]),
     _vm._v(" "),
     _c(
       "div",
@@ -40375,7 +40401,7 @@ var render = function() {
             attrs: { id: "example1" }
           },
           [
-            _vm._m(1),
+            _vm._m(0),
             _vm._v(" "),
             _c(
               "tbody",
@@ -40424,7 +40450,7 @@ var render = function() {
               0
             ),
             _vm._v(" "),
-            _vm._m(2)
+            _vm._m(1)
           ]
         )
       ]
@@ -40466,7 +40492,7 @@ var render = function() {
               [_vm._v("Update Delivery Point ")]
             ),
             _vm._v(" "),
-            _vm._m(3)
+            _vm._m(2)
           ]),
           _vm._v(" "),
           _c(
@@ -40607,31 +40633,6 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "card-header d-flex bd-highlight" }, [
-      _c("h3", { staticClass: "p-2 flex-grow-1 bd-highlight" }, [
-        _vm._v("Delivery Pint Information")
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "p-2 bd-highlight" }, [
-        _c(
-          "button",
-          {
-            staticClass: "btn btn-info",
-            attrs: {
-              type: "button",
-              "data-toggle": "modal",
-              "data-target": "#modal-create"
-            }
-          },
-          [_c("i", { staticClass: "far fa-plus-square" })]
-        )
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
     return _c("thead", [
       _c("tr", [
         _c("th", { staticStyle: { width: "70px" } }, [_vm._v("ID")]),
@@ -40701,7 +40702,27 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "card" }, [
-    _vm._m(0),
+    _c("div", { staticClass: "card-header d-flex bd-highlight" }, [
+      _c("h3", { staticClass: "p-2 flex-grow-1 bd-highlight" }, [
+        _vm._v("Depot Information")
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "p-2 bd-highlight" }, [
+        _c(
+          "button",
+          {
+            staticClass: "btn btn-info",
+            attrs: {
+              type: "button",
+              "data-toggle": "modal",
+              "data-target": "#modal-create"
+            },
+            on: { click: _vm.newModel }
+          },
+          [_c("i", { staticClass: "far fa-plus-square" })]
+        )
+      ])
+    ]),
     _vm._v(" "),
     _c(
       "div",
@@ -40717,7 +40738,7 @@ var render = function() {
             attrs: { id: "example1" }
           },
           [
-            _vm._m(1),
+            _vm._m(0),
             _vm._v(" "),
             _c(
               "tbody",
@@ -40745,7 +40766,7 @@ var render = function() {
                         attrs: { type: "button", "data-toggle": "modal" },
                         on: {
                           click: function($event) {
-                            return _vm.editModal(_vm.deliveryPoint)
+                            return _vm.editModal(depotInfo)
                           }
                         }
                       },
@@ -40770,7 +40791,7 @@ var render = function() {
               0
             ),
             _vm._v(" "),
-            _vm._m(2)
+            _vm._m(1)
           ]
         )
       ]
@@ -40812,7 +40833,7 @@ var render = function() {
               [_vm._v("Update Depot ")]
             ),
             _vm._v(" "),
-            _vm._m(3)
+            _vm._m(2)
           ]),
           _vm._v(" "),
           _c(
@@ -40951,9 +40972,36 @@ var render = function() {
                     _c(
                       "select",
                       {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.depotInfosForm.delivery_point_id,
+                            expression: "depotInfosForm.delivery_point_id"
+                          }
+                        ],
                         staticClass: "form-control select2",
                         staticStyle: { width: "100%" },
-                        attrs: { id: "del_point_id" }
+                        attrs: { id: "del_point_id" },
+                        on: {
+                          change: function($event) {
+                            var $$selectedVal = Array.prototype.filter
+                              .call($event.target.options, function(o) {
+                                return o.selected
+                              })
+                              .map(function(o) {
+                                var val = "_value" in o ? o._value : o.value
+                                return val
+                              })
+                            _vm.$set(
+                              _vm.depotInfosForm,
+                              "delivery_point_id",
+                              $event.target.multiple
+                                ? $$selectedVal
+                                : $$selectedVal[0]
+                            )
+                          }
+                        }
                       },
                       _vm._l(_vm.deliveryPoints, function(deliveryPoint) {
                         return _c(
@@ -41027,31 +41075,6 @@ var render = function() {
   ])
 }
 var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "card-header d-flex bd-highlight" }, [
-      _c("h3", { staticClass: "p-2 flex-grow-1 bd-highlight" }, [
-        _vm._v("Depot Information")
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "p-2 bd-highlight" }, [
-        _c(
-          "button",
-          {
-            staticClass: "btn btn-info",
-            attrs: {
-              type: "button",
-              "data-toggle": "modal",
-              "data-target": "#modal-create"
-            }
-          },
-          [_c("i", { staticClass: "far fa-plus-square" })]
-        )
-      ])
-    ])
-  },
   function() {
     var _vm = this
     var _h = _vm.$createElement

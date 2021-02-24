@@ -3,7 +3,7 @@
         <div class="card-header d-flex bd-highlight">
             <h3 class="p-2 flex-grow-1 bd-highlight">Depot Information</h3>
             <div class="p-2 bd-highlight">
-                <button type="button" class="btn btn-info" data-toggle="modal" data-target="#modal-create">
+                <button type="button" @click="newModel"class="btn btn-info" data-toggle="modal" data-target="#modal-create">
                     <i class="far fa-plus-square"></i>
                 </button>
             </div>
@@ -31,7 +31,7 @@
                     <td style="width: 150px;">
                         <a type="button"
                            class="btn btn-primary"
-                           data-toggle="modal" @click="editModal(deliveryPoint)">
+                           data-toggle="modal" @click="editModal(depotInfo)">
                             <i class="fas fa-edit"></i>
                         </a>
                         <a @click="deleteDeliveryPoint(deliveryPoint)"
@@ -93,6 +93,7 @@
                                 <label for="del_point_id" class="col-sm-2 col-form-label">Delivery Point</label>
                                 <div class="col-sm-10">
                                     <select id ="del_point_id"
+                                            v-model="depotInfosForm.delivery_point_id"
                                             class="form-control select2"
                                             style="width: 100%;">
                                         <option v-for="deliveryPoint in deliveryPoints"
@@ -138,20 +139,22 @@
         methods:{
             newModel(){
                 this.editmode = false;
-
+                this.depotInfosForm.reset();
                 $('#modal-create').modal('show');
 
             },
             editModal(depotInfo){
                 this.editmode = true;
-
+                this.depotInfosForm.reset();
                 $('#modal-create').modal('show');
                 this.depotInfosForm.fill(depotInfo);
             },
+            DepotInfo(){
+                console.log('Create Depot')
+            },
             loadeDepotInfo(){
                 axios.get("/api/depotInfo").then(response => {
-                    console.log(response.data);
-                    this.deliveryPoints = response.data;
+                    this.depotInfos = response.data;
 
                 });
             },
@@ -164,7 +167,7 @@
             },
             createdepotInfos(){
                 //console.log("sub");
-                this.deliveryPointsForm.post('/api/depotInfo')
+                this.depotInfosForm.post('/api/depotInfo')
                     .then(
                         ({ data }) => {
                             this.depotInfosForm.name='';
@@ -186,18 +189,19 @@
                 $('#modal-create').modal('hide');
                 this.loadeDepotInfo();
             },
-            deleteDeliveryPoint(deliveryPoint){
-                axios.delete(`/api/deliveryPoint/${deliveryPoint.id}`)
+            deleteDeliveryPoint(depotInfo){
+                axios.delete(`/api/depotInfo/${depotInfo.id}`)
                     .then(() => {
                         console.log('Delete');
                     });
-                let index = this.deliveryPoints.indexOf(deliveryPoint);
-                this.deliveryPoints.splice(index, 1);
+                let index = this.depotInfos.indexOf(depotInfo);
+                this.depotInfos.splice(index, 1);
             }
         },
         mounted() {
-            this.loadeDepotInfo();
+
             this.loadeDeliveryPoint();
+            this.loadeDepotInfo();
 
         }
 

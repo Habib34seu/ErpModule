@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\DeliveryPoint;
 use App\Models\DepotInfo;
 use Illuminate\Http\Request;
+use Haruncpi\LaravelIdGenerator\IdGenerator;
+use Illuminate\Support\Facades\DB;
 
 class DepotInfoController extends Controller
 {
@@ -14,26 +16,12 @@ class DepotInfoController extends Controller
      * @return \Illuminate\Http\Response
      *
      */
-    public function deliveryPoint()
-    {
-        $deliveryPoints = DeliveryPoint::get();
-        return response()->json($deliveryPoints,200);
-    }
     public function index()
     {
         $depotInfos = DepotInfo::get();
         return response()->json($depotInfos,200);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -43,29 +31,24 @@ class DepotInfoController extends Controller
      */
     public function store(Request $request)
     {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\DepotInfo  $depotInfo
-     * @return \Illuminate\Http\Response
-     */
-    public function show(DepotInfo $depotInfo)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\DepotInfo  $depotInfo
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(DepotInfo $depotInfo)
-    {
-        //
+        $this->validate($request,[
+            'name'=>'required',
+            'address'=>'required',
+            'delivery_point_id'=>'required',
+        ]);
+        $count = DB::table('depot_infos')->get()->count();
+        $code_gen= IdGenerator::generate(
+            [
+                'table' => 'depot_infos', 'length' => 10, 'prefix' =>date('ymd')
+            ]);
+        $code_genarate =$code_gen +$count ;
+        $depotInfo = DepotInfo::create([
+            'code'=>$code_genarate,
+            'name'=>$request->name,
+            'address'=>$request->address,
+            'delivery_point_id'=>$request->delivery_point_id,
+        ]);
+        return response()->json('success',200);
     }
 
     /**
@@ -75,9 +58,11 @@ class DepotInfoController extends Controller
      * @param  \App\Models\DepotInfo  $depotInfo
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, DepotInfo $depotInfo)
+    public function update(Request $request, $id)
     {
-        //
+        $depotInfo = DepotInfo::findOrFail($id);
+        $depotInfo->update($request->all());
+        return ['message'=>'Update Successfully'];
     }
 
     /**

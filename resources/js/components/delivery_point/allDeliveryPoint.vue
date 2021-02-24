@@ -3,7 +3,7 @@
         <div class="card-header d-flex bd-highlight">
             <h3 class="p-2 flex-grow-1 bd-highlight">Delivery Pint Information</h3>
             <div class="p-2 bd-highlight">
-                <button type="button" class="btn btn-info" data-toggle="modal" data-target="#modal-create">
+                <button type="button" @click="newModel" class="btn btn-info" data-toggle="modal" data-target="#modal-create">
                     <i class="far fa-plus-square"></i>
                 </button>
             </div>
@@ -106,19 +106,18 @@
         methods:{
             newModel(){
                 this.editmode = false;
-
+                this.deliveryPointsForm.reset();
                 $('#modal-create').modal('show');
 
             },
             editModal(deliveryPoint){
                 this.editmode = true;
-
+                this.deliveryPointsForm.reset();
                 $('#modal-create').modal('show');
                 this.deliveryPointsForm.fill(deliveryPoint);
             },
             loadeDeliveryPoint(){
                 axios.get("/api/deliveryPoint").then(response => {
-                    console.log(response.data);
                     this.deliveryPoints = response.data;
 
                 });

@@ -19,7 +19,7 @@ class CreateDepotInfosTable extends Migration
             $table->string('name');
             $table->string('address');
             $table->bigInteger('delivery_point_id');
-            $table->bigInteger('user_id');
+            $table->bigInteger('user_id')->nullable();
             $table->timestamps();
         });
     }
