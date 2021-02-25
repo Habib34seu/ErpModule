@@ -11,4 +11,5 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::resource('country','\App\Http\Controllers\CountryController');
 Route::resource('/deliveryPoint','\App\Http\Controllers\DeliveryPointController');
 Route::resource('/depotInfo','\App\Http\Controllers\DepotInfoController');
+Route::resource('/vehicleInfo','\App\Http\Controllers\VehicleInfoController');
 

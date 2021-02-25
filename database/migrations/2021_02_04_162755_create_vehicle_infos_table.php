@@ -14,12 +14,13 @@ class CreateVehicleInfosTable extends Migration
     public function up()
     {
         Schema::create('vehicle_infos', function (Blueprint $table) {
-            $table->id();
+            $table->unsignedBigInteger('id');
+            //$table->id();
             $table->string('vehicle_no')->unique();
-            $table->string('vehicle_desc');
-            $table->string('vehicle_purpose');
+            $table->string('vehicle_desc')->nullable();
+            $table->string('vehicle_purpose')->nullable();
             $table->string('party');
-            $table->bigInteger('user_id');
+            $table->bigInteger('user_id')->nullable();
             $table->timestamps();
         });
     }

@@ -73,6 +73,12 @@ class DepotInfoController extends Controller
      */
     public function destroy(DepotInfo $depotInfo)
     {
-        //
+        if($depotInfo){
+            $depotInfo->delete();
+
+            return response()->json('success', 200);
+        }else {
+            return response()->json('failed', 404);
+        }
     }
 }

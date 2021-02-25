@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\VehicleInfo;
+use Haruncpi\LaravelIdGenerator\IdGenerator;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class VehicleInfoController extends Controller
 {
@@ -14,17 +16,8 @@ class VehicleInfoController extends Controller
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        $vehicleInfos = VehicleInfo::get();
+        return response()->json($vehicleInfos,200);
     }
 
     /**
@@ -35,7 +28,26 @@ class VehicleInfoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request,[
+            'vehicle_no'=>'required',
+            'vehicle_desc'=>'required',
+            'vehicle_purpose'=>'required',
+            'party'=>'required',
+        ]);
+        $count = DB::table('vehicle_infos')->get()->count();
+        $code_gen= IdGenerator::generate(
+            [
+                'table' => 'vehicle_infos', 'length' => 10, 'prefix' =>date('ymd')
+            ]);
+        $code_genarate =$code_gen +$count ;
+        $vehicleInfo = VehicleInfo::create([
+            'id'=>$code_genarate,
+            'vehicle_no'=>$request->vehicle_no,
+            'vehicle_desc'=>$request->vehicle_desc,
+            'vehicle_purpose'=>$request->vehicle_purpose,
+            'party'=>$request->party,
+        ]);
+        return response()->json('success',200);
     }
 
     /**
@@ -67,9 +79,11 @@ class VehicleInfoController extends Controller
      * @param  \App\Models\VehicleInfo  $vehicleInfo
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, VehicleInfo $vehicleInfo)
+    public function update(Request $request,  $id)
     {
-        //
+        $vehicleInfo = VehicleInfo::findOrFail($id);
+        $vehicleInfo->update($request->all());
+        return ['message'=>'Update Successfully'];
     }
 
     /**
@@ -80,6 +94,12 @@ class VehicleInfoController extends Controller
      */
     public function destroy(VehicleInfo $vehicleInfo)
     {
-        //
+        if($vehicleInfo){
+            $vehicleInfo->delete();
+
+            return response()->json('success', 200);
+        }else {
+            return response()->json('failed', 404);
+        }
     }
 }

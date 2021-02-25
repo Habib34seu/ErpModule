@@ -34,7 +34,7 @@
                            data-toggle="modal" @click="editModal(depotInfo)">
                             <i class="fas fa-edit"></i>
                         </a>
-                        <a @click="deleteDeliveryPoint(deliveryPoint)"
+                        <a @click="deleteDepotInfo(depotInfo)"
                            class="btn btn-danger">
                             <i class="fas fa-trash-alt"></i>
                         </a>
@@ -149,9 +149,6 @@
                 $('#modal-create').modal('show');
                 this.depotInfosForm.fill(depotInfo);
             },
-            DepotInfo(){
-                console.log('Create Depot')
-            },
             loadeDepotInfo(){
                 axios.get("/api/depotInfo").then(response => {
                     this.depotInfos = response.data;
@@ -160,7 +157,6 @@
             },
             loadeDeliveryPoint(){
                 axios.get("/api/deliveryPoint").then(response => {
-                    console.log(response.data);
                     this.deliveryPoints = response.data;
 
                 });
@@ -189,7 +185,7 @@
                 $('#modal-create').modal('hide');
                 this.loadeDepotInfo();
             },
-            deleteDeliveryPoint(depotInfo){
+            deleteDepotInfo(depotInfo){
                 axios.delete(`/api/depotInfo/${depotInfo.id}`)
                     .then(() => {
                         console.log('Delete');
