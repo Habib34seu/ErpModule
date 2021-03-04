@@ -3,7 +3,7 @@
         <div class="card-header d-flex bd-highlight">
             <h3 class="p-2 flex-grow-1 bd-highlight">Depot Information</h3>
             <div class="p-2 bd-highlight">
-                <button type="button" @click="newModel"class="btn btn-info" data-toggle="modal" data-target="#modal-create">
+                <button type="button" @click="newModel" class="btn btn-info" data-toggle="modal" data-target="#modal-create">
                     <i class="far fa-plus-square"></i>
                 </button>
             </div>
@@ -96,8 +96,7 @@
                                             v-model="depotInfosForm.delivery_point_id"
                                             class="form-control select2"
                                             style="width: 100%;">
-                                        <option v-for="deliveryPoint in deliveryPoints"
-                                                v-bind:value="deliveryPoint.id"
+                                        <option v-for="deliveryPoint in deliveryPoints" v-bind:value="deliveryPoint.id"
                                             selected="selected">{{deliveryPoint.del_point_name}}</option>
                                     </select>
                                 </div>

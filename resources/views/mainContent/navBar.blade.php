@@ -47,16 +47,16 @@
             </router-link>
         </li>
         <li class="nav-item">
-            <a href="" class="nav-link">
+        <router-link to="/transportAgent" class="nav-link">
                 <i class="far fa-circle nav-icon"></i>
-                <p>Fixed Footer</p>
-            </a>
+                <p>Transport Agent</p>
+            </router-link>
         </li>
         <li class="nav-item">
-            <a href="" class="nav-link">
+        <router-link to="/jobInvDetails" class="nav-link">
                 <i class="far fa-circle nav-icon"></i>
-                <p>Collapsed Sidebar</p>
-            </a>
+                <p>Job Invoice Dtl</p>
+            </router-link>
         </li>
     </ul>
 </li>

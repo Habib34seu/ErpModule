@@ -9,6 +9,8 @@ Vue.component('deliveryPont', require('./components/delivery_point/allDeliveryPo
 Vue.component('depotInfo', require('./components/depot_info/allDepotInfo'));
 Vue.component('vehicleInfo', require('./components/vehicle_info/allVehicleInfo'));
 Vue.component('buyerInfo', require('./components/buyer_info/allBuyer'));
+Vue.component('transportAgent', require('./components/transport_agent/allTransPortAgent'));
+Vue.component('jobInvDetails', require('./components/job_inv_dtl/allJobInvDtls'));
 
 import { Form, HasError, AlertError } from 'vform';
 window.Form = Form;

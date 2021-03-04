@@ -5,11 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class BuyerInfo extends Model
+class ShipmentJobInvoiceDetail extends Model
 {
     use HasFactory;
     protected $guarded=[];
-    protected $primaryKey = 'id'; // or null
+    protected $primaryKey = 'job_inv_id'; // or null
 
     public $incrementing = false;
 }

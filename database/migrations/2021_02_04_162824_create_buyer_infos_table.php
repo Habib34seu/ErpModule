@@ -14,21 +14,20 @@ class CreateBuyerInfosTable extends Migration
     public function up()
     {
         Schema::create('buyer_infos', function (Blueprint $table) {
-            $table->id();
-            $table->string('code')->unique();
-            $table->string('name');
+            $table->unsignedBigInteger('id');
+            $table->string('name')->unique();
             $table->text('address');
-            $table->text('area');
-            $table->string('city');
-            $table->string('state');
-            $table->string('phone');
-            $table->string('fax');
-            $table->string('zip_code');
-            $table->string('email');
-            $table->string('web');
+            $table->text('area')->nullable();
+            $table->string('city')->nullable();
+            $table->string('state')->nullable();
+            $table->string('phone')->nullable();
+            $table->string('fax')->nullable();
+            $table->string('zip_code')->nullable();
+            $table->string('email')->nullable()->unique();
+            $table->string('web')->nullable()->nullable();
             $table->string('buyer_type');
             $table->bigInteger('country_id');
-            $table->bigInteger('user_id');
+            $table->bigInteger('user_id')->nullable();
             $table->timestamps();
         });
     }
