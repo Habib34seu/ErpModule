@@ -66,38 +66,122 @@
         <!-- /.card-body -->
         <!-- /Country Create Modal Start -->
                 <div class="modal fade" id="modal-create">
-                    <div class="modal-dialog modal-lg">
+                    <div class="modal-dialog modal-xl">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h4 class="modal-title" v-show="!editmode">Add New Country </h4>
+                                <h4 class="modal-title" v-show="!editmode">Add Shipment Job Invoice </h4>
                                 <h4 class="modal-title" v-show="editmode">Update Country </h4>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
-                            <form @submit.prevent="editmode ? updateCountry() : createCountry()">
+                            <form @submit.prevent="editmode ? updateCountry() : createBuyer()">
                                 <div class="modal-body">
-                                    <tr v-for="(shipmentJobInvoiceDetail, k) in shipmentJobInvoiceDetails" :key="k">
-                                       
-                                        <td>
-                                            <input class="form-control" type="text" v-model="shipmentJobInvoiceDetail.product_no" />
-                                        </td>
-                                        <td>
-                                            <input class="form-control" type="text" v-model="shipmentJobInvoiceDetail.product_name" />
-                                        </td>
-                                        <td>
-                                            <input class="form-control text-right" type="number" min="0" step=".01" 
-                                            v-model="shipmentJobInvoiceDetail.product_price" @change="calculateLineTotal(invoice_product)"
-                                            />
-                                        </td>
-                                        <td>
-                                            <input readonly class="form-control text-right" type="number" min="0" step=".01"
-                                             v-model="shipmentJobInvoiceDetail.line_total" />
-                                        </td>
-                                         <td scope="row" class="trashIconContainer">
-                                            <i class="far fa-trash-alt" @click="deleteRow(k, invoice_product)"></i>
-                                        </td>
-                                    </tr>
+                                    <table id="example1" class="table table-bordered table-striped">
+                                            <thead>
+                                            <tr>
+                                                
+                                                        <th style="width: 150px;">Buyer Name</th>
+                                                        <th style="width: 150px;">Country</th>
+                                                        <th>Order No</th>
+                                                        <th>Article No</th>
+                                                        <th>Job No</th>
+                                                        <th>Invoice No</th>
+                                                        <th>Invoice Value</th>
+                                                        <th>Invoice Date</th>
+                                                        <th>Action</th>
+                                                   
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr v-for="(jobInvDtlForm, k) in jobInvDtlForms" :key="k">
+                                                <td>
+                                                    <div>
+                                                        <select
+                                                            v-model="jobInvDtlForm.buyer_id"
+                                                            class="form-control select2"
+                                                            style="width: 100%;">
+                                                        <option v-for="buyer in buyers"
+                                                                v-bind:value="buyer.id"
+                                                                selected="selected">{{buyer.name}}</option>
+                                                    </select>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div>
+                                                        <select
+                                                            v-model="jobInvDtlForm.country_id"
+                                                            class="form-control select2"
+                                                            style="width: 100%;">
+                                                        <option v-for="country in countries"
+                                                                v-bind:value="country.id"
+                                                                selected="selected">{{country.name}}</option>
+                                                    </select>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div>
+                                                        <input
+                                                            type="text"
+                                                            class="form-control"
+                                                            v-model="jobInvDtlForm.order_no"
+                                                            placeholder="Order No Enter ...">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div>
+                                                        <input
+                                                            type="text"
+                                                            class="form-control"
+                                                            v-model="jobInvDtlForm.article_no"
+                                                            placeholder="Article No Enter ...">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div>
+                                                        <input
+                                                            type="text"
+                                                            class="form-control"
+                                                            v-model="jobInvDtlForm.job_no"
+                                                            placeholder="Job No Enter ...">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div>
+                                                        <input
+                                                            type="text"
+                                                            class="form-control"
+                                                            v-model="jobInvDtlForm.inv_no"
+                                                            placeholder="Invoice No Enter ...">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div>
+                                                        <input
+                                                            type="text"
+                                                            class="form-control"
+                                                            v-model="jobInvDtlForm.inv_value"
+                                                            placeholder="Invoice Value Enter ...">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div>
+                                                        <input
+                                                            type="text"
+                                                            class="form-control"
+                                                            v-model="jobInvDtlForm.inv_date"
+                                                            placeholder="Invoice Date Enter ...">
+                                                    </div>
+                                                </td>
+
+                                                <td>
+                                                    <i class="fas fa-minus-circle" @click="remove(k)" v-show="k || ( !k && jobInvDtlForms.length > 1)"></i>
+                                                    <i class="fas fa-plus-circle" @click="add(k)" v-show="k == jobInvDtlForms.length-1"></i>
+                                                </td>
+                                                
+                                            </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
                                 <div class="modal-footer justify-content-between">
                                     <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
@@ -122,8 +206,22 @@
             return{
                 editmode:false,
                 countries:[],
+                buyers:[],
                 shipmentJobInvoiceDetails:[],
-                //  : new Form({
+                jobInvDtlForms:[
+                    {
+                        job_inv_id:'',
+                        buyer_id:'',
+                        country_id:'',
+                        job_no:'',
+                        inv_no:'',
+                        inv_value:'',
+                        inv_date:'',
+                        article_no:'',
+                        order_no:'',
+                    }
+                ],
+                //  jobInvDtlForms: new Form({
                 //     job_inv_id:'',
                 //     buyer_id:'',
                 //     country_id:'',
@@ -133,10 +231,29 @@
                 //     inv_date:'',
                 //     article_no:'',
                 //     order_no:'',
+                //     line_total: 0
                 // })
             }
         },
         methods:{
+
+            add(index) {
+            this.jobInvDtlForms.push({ 
+                buyer_id: '', 
+                country_id :'',
+                job_no :'',
+                inv_no :'',
+                inv_value :'',
+                inv_date :'',
+                article_no :'',
+                order_no :'',
+                });
+        },
+        remove(index) {
+            this.jobInvDtlForms.splice(index, 1);
+        },
+
+
             newModel(){
                 this.editmode = false;
 
@@ -154,16 +271,45 @@
                     this.countries = response.data;
                 });
             },
+            loadeBuyer(){
+                axios.get("/api/buyerInfo").then(response => {
+                    this.buyers = response.data;
+
+                });
+            },
             loadeJobInvDtl(){
                 axios.get("/api/jobInvDetails").then(response => {
                     this.shipmentJobInvoiceDetails = response.data;
                 });
+            },
+
+            createBuyer(){
+                console.log('create');
+                // this.buyersForm.post('/api/transportAgent')
+                //     .then(
+                //         ({ data }) => {
+                //             this.jobInvDtlForms.buyer_id='';
+                //             this.jobInvDtlForms.country_id='';
+                //             this.jobInvDtlForms.job_no='';
+                //             this.jobInvDtlForms.inv_no='';
+                //             this.jobInvDtlForms.inv_value='';
+                //             this.jobInvDtlForms.inv_date='';
+                //             this.jobInvDtlForms.article_no='';
+                //             this.jobInvDtlForms.order_no='';
+
+                //             $('#modal-create').modal('hide');
+                //             this.loadeJobInvDtl();
+                //         })
+                //          .catch(error => {
+                //                console.log(error.response)
+                //           });
             },
             
         },
         mounted() {
             this.loadeCountry();
             this.loadeJobInvDtl();
+            this.loadeBuyer();
         }
     }
 </script>
