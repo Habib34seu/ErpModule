@@ -37,7 +37,12 @@ class ShipmentJobInvoiceDetailController extends Controller
      */
     public function store(Request $request)
     {
-        //
+       $formdata = $request->all();
+       $shipinv = ShipmentJobInvoiceDetail::create(
+        $formdata['ver']
+       );
+       return response()->json($formdata);
+
     }
 
     /**

@@ -9,7 +9,9 @@ class ShipmentJobInvoiceDetail extends Model
 {
     use HasFactory;
     protected $guarded=[];
-    protected $primaryKey = 'job_inv_id'; // or null
+    // protected $primaryKey = 'job_inv_id'; // or null
 
-    public $incrementing = false;
+    // public $incrementing = false;
+
+    // protected $fillable =['job_inv_id','buyer_id'];
 }

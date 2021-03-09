@@ -14,13 +14,13 @@ class CreateShipmentJobInvoiceDetailsTable extends Migration
     public function up()
     {
         Schema::create('shipment_job_invoice_details', function (Blueprint $table) {
-            $table->unsignedBigInteger('job_inv_id');
+            $table->id();
             $table->unsignedBigInteger('buyer_id');
             $table->unsignedBigInteger('country_id');
             $table->string('job_no');
             $table->string('inv_no');
             $table->unsignedBigInteger('inv_value');
-            $table->date('inv_date');
+            $table->date('inv_date')->nullable();
             $table->string('article_no');
             $table->string('article_no_del')->nullable();
             $table->string('order_no');

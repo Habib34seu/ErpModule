@@ -75,12 +75,12 @@
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
-                            <form @submit.prevent="editmode ? updateCountry() : createBuyer()">
+                            <form @submit.prevent="editmode ? updateCountry() : creaInvShipDtl()">
                                 <div class="modal-body">
                                     <table id="example1" class="table table-bordered table-striped">
                                             <thead>
                                             <tr>
-                                                
+
                                                         <th style="width: 150px;">Buyer Name</th>
                                                         <th style="width: 150px;">Country</th>
                                                         <th>Order No</th>
@@ -175,8 +175,96 @@
                                                 </td>
 
                                                 <td>
-                                                    <i class="fas fa-minus-circle" @click="remove(k)" v-show="k || ( !k && jobInvDtlForms.length > 1)"></i>
-                                                    <i class="fas fa-plus-circle" @click="add(k)" v-show="k == jobInvDtlForms.length-1"></i>
+                                                    <i class="fas fa-minus-circle" @click="remove"></i>
+                                                   
+                                                </td>
+                                                
+                                            </tr>
+                                        </tbody>
+                                         <tbody>
+                                            <tr >
+                                                <td>
+                                                    <div>
+                                                        <select
+                                                            v-model="obj.buyer_id"
+                                                            class="form-control select2"
+                                                            style="width: 100%;">
+                                                        <option v-for="buyer in buyers"
+                                                                v-bind:value="buyer.id"
+                                                                selected="selected">{{buyer.name}}</option>
+                                                    </select>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div>
+                                                        <select
+                                                            v-model="obj.country_id"
+                                                            class="form-control select2"
+                                                            style="width: 100%;">
+                                                        <option v-for="country in countries"
+                                                                v-bind:value="country.id"
+                                                                selected="selected">{{country.name}}</option>
+                                                    </select>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div>
+                                                        <input
+                                                            type="text"
+                                                            class="form-control"
+                                                            v-model="obj.order_no"
+                                                            placeholder="Order No Enter ...">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div>
+                                                        <input
+                                                            type="text"
+                                                            class="form-control"
+                                                            v-model="obj.article_no"
+                                                            placeholder="Article No Enter ...">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div>
+                                                        <input
+                                                            type="text"
+                                                            class="form-control"
+                                                            v-model="obj.job_no"
+                                                            placeholder="Job No Enter ...">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div>
+                                                        <input
+                                                            type="text"
+                                                            class="form-control"
+                                                            v-model="obj.inv_no"
+                                                            placeholder="Invoice No Enter ...">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div>
+                                                        <input
+                                                            type="text"
+                                                            class="form-control"
+                                                            v-model="obj.inv_value"
+                                                            placeholder="Invoice Value Enter ...">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div>
+                                                        <input
+                                                            type="text"
+                                                            class="form-control"
+                                                            v-model="obj.inv_date"
+                                                            placeholder="Invoice Date Enter ...">
+                                                    </div>
+                                                </td>
+
+                                                <td>
+                                                    <i class="fas fa-minus-circle" @click="remove"></i>
+                                                    <i class="fas fa-plus-circle" @click="add" ></i>
                                                 </td>
                                                 
                                             </tr>
@@ -208,8 +296,20 @@
                 countries:[],
                 buyers:[],
                 shipmentJobInvoiceDetails:[],
-                jobInvDtlForms:[
-                    {
+                obj: {
+
+                        job_inv_id:'',
+                        buyer_id:'1',
+                        country_id:'1',
+                        job_no:'sdfas',
+                        inv_no:'sadfas',
+                        inv_value:'54546',
+                        inv_date:'',
+                        article_no:'sdfsd',
+                        order_no:'asdasd',
+
+                    },
+                    initobj: {
                         job_inv_id:'',
                         buyer_id:'',
                         country_id:'',
@@ -219,35 +319,17 @@
                         inv_date:'',
                         article_no:'',
                         order_no:'',
-                    }
-                ],
-                //  jobInvDtlForms: new Form({
-                //     job_inv_id:'',
-                //     buyer_id:'',
-                //     country_id:'',
-                //     job_no:'',
-                //     inv_no:'',
-                //     inv_value:'',
-                //     inv_date:'',
-                //     article_no:'',
-                //     order_no:'',
-                //     line_total: 0
-                // })
+                    },
+                jobInvDtlForms:[],
             }
         },
         methods:{
 
             add(index) {
-            this.jobInvDtlForms.push({ 
-                buyer_id: '', 
-                country_id :'',
-                job_no :'',
-                inv_no :'',
-                inv_value :'',
-                inv_date :'',
-                article_no :'',
-                order_no :'',
-                });
+            this.jobInvDtlForms.push(this.obj);
+            this.obj={
+              ...this.initobj
+            }
         },
         remove(index) {
             this.jobInvDtlForms.splice(index, 1);
@@ -283,26 +365,20 @@
                 });
             },
 
-            createBuyer(){
-                console.log('create');
-                // this.buyersForm.post('/api/transportAgent')
-                //     .then(
-                //         ({ data }) => {
-                //             this.jobInvDtlForms.buyer_id='';
-                //             this.jobInvDtlForms.country_id='';
-                //             this.jobInvDtlForms.job_no='';
-                //             this.jobInvDtlForms.inv_no='';
-                //             this.jobInvDtlForms.inv_value='';
-                //             this.jobInvDtlForms.inv_date='';
-                //             this.jobInvDtlForms.article_no='';
-                //             this.jobInvDtlForms.order_no='';
+            creaInvShipDtl(){
+               console.log(this.jobInvDtlForms)
+               axios.post('/api/jobInvDetails',{ver:this.jobInvDtlForms})
+                    .then(
+                        ( data ) => {
+                          console.log(data.data);
 
-                //             $('#modal-create').modal('hide');
-                //             this.loadeJobInvDtl();
-                //         })
-                //          .catch(error => {
-                //                console.log(error.response)
-                //           });
+                            // this.countryForm.code='';
+                            // this.countryForm.name='';
+
+                            $('#modal-create').modal('hide');
+                            this.loadeCountry();
+                        })
+
             },
             
         },

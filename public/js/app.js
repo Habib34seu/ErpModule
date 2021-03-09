@@ -2827,6 +2827,100 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -3036,7 +3130,18 @@ __webpack_require__.r(__webpack_exports__);
       countries: [],
       buyers: [],
       shipmentJobInvoiceDetails: [],
-      jobInvDtlForms: [{
+      obj: {
+        job_inv_id: '',
+        buyer_id: '1',
+        country_id: '1',
+        job_no: 'sdfas',
+        inv_no: 'sadfas',
+        inv_value: '54546',
+        inv_date: '',
+        article_no: 'sdfsd',
+        order_no: 'asdasd'
+      },
+      initobj: {
         job_inv_id: '',
         buyer_id: '',
         country_id: '',
@@ -3046,33 +3151,14 @@ __webpack_require__.r(__webpack_exports__);
         inv_date: '',
         article_no: '',
         order_no: ''
-      }] //  jobInvDtlForms: new Form({
-      //     job_inv_id:'',
-      //     buyer_id:'',
-      //     country_id:'',
-      //     job_no:'',
-      //     inv_no:'',
-      //     inv_value:'',
-      //     inv_date:'',
-      //     article_no:'',
-      //     order_no:'',
-      //     line_total: 0
-      // })
-
+      },
+      jobInvDtlForms: []
     };
   },
   methods: {
     add: function add(index) {
-      this.jobInvDtlForms.push({
-        buyer_id: '',
-        country_id: '',
-        job_no: '',
-        inv_no: '',
-        inv_value: '',
-        inv_date: '',
-        article_no: '',
-        order_no: ''
-      });
+      this.jobInvDtlForms.push(this.obj);
+      this.obj = _objectSpread({}, this.initobj);
     },
     remove: function remove(index) {
       this.jobInvDtlForms.splice(index, 1);
@@ -3107,24 +3193,20 @@ __webpack_require__.r(__webpack_exports__);
         _this3.shipmentJobInvoiceDetails = response.data;
       });
     },
-    createBuyer: function createBuyer() {
-      console.log('create'); // this.buyersForm.post('/api/transportAgent')
-      //     .then(
-      //         ({ data }) => {
-      //             this.jobInvDtlForms.buyer_id='';
-      //             this.jobInvDtlForms.country_id='';
-      //             this.jobInvDtlForms.job_no='';
-      //             this.jobInvDtlForms.inv_no='';
-      //             this.jobInvDtlForms.inv_value='';
-      //             this.jobInvDtlForms.inv_date='';
-      //             this.jobInvDtlForms.article_no='';
-      //             this.jobInvDtlForms.order_no='';
-      //             $('#modal-create').modal('hide');
-      //             this.loadeJobInvDtl();
-      //         })
-      //          .catch(error => {
-      //                console.log(error.response)
-      //           });
+    creaInvShipDtl: function creaInvShipDtl() {
+      var _this4 = this;
+
+      console.log(this.jobInvDtlForms);
+      axios.post('/api/jobInvDetails', {
+        ver: this.jobInvDtlForms
+      }).then(function (data) {
+        console.log(data.data); // this.countryForm.code='';
+        // this.countryForm.name='';
+
+        $('#modal-create').modal('hide');
+
+        _this4.loadeCountry();
+      });
     }
   },
   mounted: function mounted() {
@@ -42732,7 +42814,7 @@ var render = function() {
               on: {
                 submit: function($event) {
                   $event.preventDefault()
-                  _vm.editmode ? _vm.updateCountry() : _vm.createBuyer()
+                  _vm.editmode ? _vm.updateCountry() : _vm.creaInvShipDtl()
                 }
               }
             },
@@ -43057,45 +43139,330 @@ var render = function() {
                           _vm._v(" "),
                           _c("td", [
                             _c("i", {
-                              directives: [
-                                {
-                                  name: "show",
-                                  rawName: "v-show",
-                                  value:
-                                    k || (!k && _vm.jobInvDtlForms.length > 1),
-                                  expression:
-                                    "k || ( !k && jobInvDtlForms.length > 1)"
-                                }
-                              ],
                               staticClass: "fas fa-minus-circle",
-                              on: {
-                                click: function($event) {
-                                  return _vm.remove(k)
-                                }
-                              }
-                            }),
-                            _vm._v(" "),
-                            _c("i", {
-                              directives: [
-                                {
-                                  name: "show",
-                                  rawName: "v-show",
-                                  value: k == _vm.jobInvDtlForms.length - 1,
-                                  expression: "k == jobInvDtlForms.length-1"
-                                }
-                              ],
-                              staticClass: "fas fa-plus-circle",
-                              on: {
-                                click: function($event) {
-                                  return _vm.add(k)
-                                }
-                              }
+                              on: { click: _vm.remove }
                             })
                           ])
                         ])
                       }),
                       0
-                    )
+                    ),
+                    _vm._v(" "),
+                    _c("tbody", [
+                      _c("tr", [
+                        _c("td", [
+                          _c("div", [
+                            _c(
+                              "select",
+                              {
+                                directives: [
+                                  {
+                                    name: "model",
+                                    rawName: "v-model",
+                                    value: _vm.obj.buyer_id,
+                                    expression: "obj.buyer_id"
+                                  }
+                                ],
+                                staticClass: "form-control select2",
+                                staticStyle: { width: "100%" },
+                                on: {
+                                  change: function($event) {
+                                    var $$selectedVal = Array.prototype.filter
+                                      .call($event.target.options, function(o) {
+                                        return o.selected
+                                      })
+                                      .map(function(o) {
+                                        var val =
+                                          "_value" in o ? o._value : o.value
+                                        return val
+                                      })
+                                    _vm.$set(
+                                      _vm.obj,
+                                      "buyer_id",
+                                      $event.target.multiple
+                                        ? $$selectedVal
+                                        : $$selectedVal[0]
+                                    )
+                                  }
+                                }
+                              },
+                              _vm._l(_vm.buyers, function(buyer) {
+                                return _c(
+                                  "option",
+                                  {
+                                    attrs: { selected: "selected" },
+                                    domProps: { value: buyer.id }
+                                  },
+                                  [_vm._v(_vm._s(buyer.name))]
+                                )
+                              }),
+                              0
+                            )
+                          ])
+                        ]),
+                        _vm._v(" "),
+                        _c("td", [
+                          _c("div", [
+                            _c(
+                              "select",
+                              {
+                                directives: [
+                                  {
+                                    name: "model",
+                                    rawName: "v-model",
+                                    value: _vm.obj.country_id,
+                                    expression: "obj.country_id"
+                                  }
+                                ],
+                                staticClass: "form-control select2",
+                                staticStyle: { width: "100%" },
+                                on: {
+                                  change: function($event) {
+                                    var $$selectedVal = Array.prototype.filter
+                                      .call($event.target.options, function(o) {
+                                        return o.selected
+                                      })
+                                      .map(function(o) {
+                                        var val =
+                                          "_value" in o ? o._value : o.value
+                                        return val
+                                      })
+                                    _vm.$set(
+                                      _vm.obj,
+                                      "country_id",
+                                      $event.target.multiple
+                                        ? $$selectedVal
+                                        : $$selectedVal[0]
+                                    )
+                                  }
+                                }
+                              },
+                              _vm._l(_vm.countries, function(country) {
+                                return _c(
+                                  "option",
+                                  {
+                                    attrs: { selected: "selected" },
+                                    domProps: { value: country.id }
+                                  },
+                                  [_vm._v(_vm._s(country.name))]
+                                )
+                              }),
+                              0
+                            )
+                          ])
+                        ]),
+                        _vm._v(" "),
+                        _c("td", [
+                          _c("div", [
+                            _c("input", {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.obj.order_no,
+                                  expression: "obj.order_no"
+                                }
+                              ],
+                              staticClass: "form-control",
+                              attrs: {
+                                type: "text",
+                                placeholder: "Order No Enter ..."
+                              },
+                              domProps: { value: _vm.obj.order_no },
+                              on: {
+                                input: function($event) {
+                                  if ($event.target.composing) {
+                                    return
+                                  }
+                                  _vm.$set(
+                                    _vm.obj,
+                                    "order_no",
+                                    $event.target.value
+                                  )
+                                }
+                              }
+                            })
+                          ])
+                        ]),
+                        _vm._v(" "),
+                        _c("td", [
+                          _c("div", [
+                            _c("input", {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.obj.article_no,
+                                  expression: "obj.article_no"
+                                }
+                              ],
+                              staticClass: "form-control",
+                              attrs: {
+                                type: "text",
+                                placeholder: "Article No Enter ..."
+                              },
+                              domProps: { value: _vm.obj.article_no },
+                              on: {
+                                input: function($event) {
+                                  if ($event.target.composing) {
+                                    return
+                                  }
+                                  _vm.$set(
+                                    _vm.obj,
+                                    "article_no",
+                                    $event.target.value
+                                  )
+                                }
+                              }
+                            })
+                          ])
+                        ]),
+                        _vm._v(" "),
+                        _c("td", [
+                          _c("div", [
+                            _c("input", {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.obj.job_no,
+                                  expression: "obj.job_no"
+                                }
+                              ],
+                              staticClass: "form-control",
+                              attrs: {
+                                type: "text",
+                                placeholder: "Job No Enter ..."
+                              },
+                              domProps: { value: _vm.obj.job_no },
+                              on: {
+                                input: function($event) {
+                                  if ($event.target.composing) {
+                                    return
+                                  }
+                                  _vm.$set(
+                                    _vm.obj,
+                                    "job_no",
+                                    $event.target.value
+                                  )
+                                }
+                              }
+                            })
+                          ])
+                        ]),
+                        _vm._v(" "),
+                        _c("td", [
+                          _c("div", [
+                            _c("input", {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.obj.inv_no,
+                                  expression: "obj.inv_no"
+                                }
+                              ],
+                              staticClass: "form-control",
+                              attrs: {
+                                type: "text",
+                                placeholder: "Invoice No Enter ..."
+                              },
+                              domProps: { value: _vm.obj.inv_no },
+                              on: {
+                                input: function($event) {
+                                  if ($event.target.composing) {
+                                    return
+                                  }
+                                  _vm.$set(
+                                    _vm.obj,
+                                    "inv_no",
+                                    $event.target.value
+                                  )
+                                }
+                              }
+                            })
+                          ])
+                        ]),
+                        _vm._v(" "),
+                        _c("td", [
+                          _c("div", [
+                            _c("input", {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.obj.inv_value,
+                                  expression: "obj.inv_value"
+                                }
+                              ],
+                              staticClass: "form-control",
+                              attrs: {
+                                type: "text",
+                                placeholder: "Invoice Value Enter ..."
+                              },
+                              domProps: { value: _vm.obj.inv_value },
+                              on: {
+                                input: function($event) {
+                                  if ($event.target.composing) {
+                                    return
+                                  }
+                                  _vm.$set(
+                                    _vm.obj,
+                                    "inv_value",
+                                    $event.target.value
+                                  )
+                                }
+                              }
+                            })
+                          ])
+                        ]),
+                        _vm._v(" "),
+                        _c("td", [
+                          _c("div", [
+                            _c("input", {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.obj.inv_date,
+                                  expression: "obj.inv_date"
+                                }
+                              ],
+                              staticClass: "form-control",
+                              attrs: {
+                                type: "text",
+                                placeholder: "Invoice Date Enter ..."
+                              },
+                              domProps: { value: _vm.obj.inv_date },
+                              on: {
+                                input: function($event) {
+                                  if ($event.target.composing) {
+                                    return
+                                  }
+                                  _vm.$set(
+                                    _vm.obj,
+                                    "inv_date",
+                                    $event.target.value
+                                  )
+                                }
+                              }
+                            })
+                          ])
+                        ]),
+                        _vm._v(" "),
+                        _c("td", [
+                          _c("i", {
+                            staticClass: "fas fa-minus-circle",
+                            on: { click: _vm.remove }
+                          }),
+                          _vm._v(" "),
+                          _c("i", {
+                            staticClass: "fas fa-plus-circle",
+                            on: { click: _vm.add }
+                          })
+                        ])
+                      ])
+                    ])
                   ]
                 )
               ]),

@@ -37,6 +37,8 @@ class DepotInfoController extends Controller
             'delivery_point_id'=>'required',
         ]);
         $count = DB::table('depot_infos')->get()->count();
+        // $count = DB::table('depot_infos')->orderBy('id', 'DESC')->first()->id;
+        // return $count;
         $code_gen= IdGenerator::generate(
             [
                 'table' => 'depot_infos', 'length' => 10, 'prefix' =>date('ymd')

@@ -33,9 +33,9 @@ class DeliveryPointController extends Controller
         $this->validate($request,[
             'del_point_name'=>'required'
         ]);
-        $count = DB::table('delivery_points')->get()->count();
+        $count = DB::table('delivery_points')->orderBy('id','desc')->first();
         $code_gen= IdGenerator::generate(['table' => 'delivery_points', 'length' => 10, 'prefix' =>date('ymd')]);
-        $code_genarate =$code_gen +$count ;
+        $code_genarate =$code_gen +$count->id ;
         $deliveryPoint = DeliveryPoint::create([
             'code'=>$code_genarate,
             'del_point_name'=>$request->del_point_name,
